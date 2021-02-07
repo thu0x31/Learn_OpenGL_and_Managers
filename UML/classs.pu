@@ -1,0 +1,95 @@
+@startuml thux
+' eventは各自のオブジェクトが持ちたい
+
+class GLFWWindow {
+    emscriptenの場合不要
+}
+GLFWWindow -> Window
+
+class Window {
+    windowラッパー
+    setup([](){})
+    update([](){} update)
+}
+
+package Scene {
+    Window -> Scene::Manager
+    ' Window -- SceneManager
+    class Scene::Manager {
+        Scene::ManagerをSceneが持つことでSceneの遷移を容易にする
+        map<id, SceneName>
+        currentScene
+        bindScene(...Scene)
+        select()// preTransitionSceneを呼び出す
+    }
+    Scene::Manager o-- Scene
+
+' シーンを複数表示させたい場合は、シーン内でシーンを呼べばいい？
+    class Scene {
+        SceneInterface
+        setup()
+        update()
+        end()
+        preTransitionScene() //シーン遷移前に呼ばれる
+    }
+
+    ' class ScenLoader {
+    '     シーンからシーンへの遷移を橋渡しするクラス
+
+    ' }
+    ' ScenLoader "1" -- "1" Scene
+}
+
+package Keybord {
+    class Key {
+        release(actionName, [](){})
+        press(actionName, [](){})
+        repeat(actionName, [](){})
+    }
+
+    class Mapper {
+        map<actionName, KeyID>
+    }
+}
+
+package Geometry {
+    class Geometry {
+        array<Point, n> points
+        array<Primitive, n> primitives
+        array<Attribute, n> attributes
+    }
+    Scene o-- Geometry
+
+    Geometry o-- Attribute
+
+    object LazyLoadFunctions {
+
+    }
+    LazyLoadFunctions .> Geometry
+
+    class Attribute {
+        pair<string name, T> value
+    }
+
+    class Point {
+        vec position
+        Attribnute number
+        Map<Attribute, Name> customAttribute
+    }
+    Attribute <|-- Point
+
+    class Primitive {
+        array vercitesTriangle<Vertex, 3>
+        array vercitesRectangle<Vertex, 4>
+        Attribnute number
+        Map<Attribute, Name> customAttribute
+    }
+    Attribute <|-- Primitive
+
+    class Vertex {
+        vec position
+    }
+    Vertex -o Primitive
+    ' Vertex <|- Attribute
+}
+@enduml
