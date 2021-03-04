@@ -24,22 +24,26 @@ package Scene {
     }
     Scene::Manager "n" o-- "1" Scene
 
-    class Scene {
+    Scene <|- AbstractScene
+    class AbstractScene {
     }
 
-    Scene "1" <|- "1" SceneInterface
+    AbstractScene  <|- SceneInterface
     class SceneInterface {
-        transition()
         setup()
         update()
         preTransition()
+    }
+
+    AbstractScene "1" <|- "1" Trasitioner
+    class Trasitioner {
+        transition()
     }
 }
 
 package Keyboard {
     ' 1 : n ? key('e')
     ' 1 : 1 key().press('e')
-    Scene <-- Key 
     class Key {
         release(actionName, [](){})
         press(actionName, [](){})
