@@ -37,10 +37,7 @@ public:
     Manager(const Window& targetWindow) noexcept : window(targetWindow) {
         (assert(SceneClass::NAME != AbstractScene::NAME), ...);
 
-        ([&]{
-            auto&& scene = std::make_shared<SceneClass>();
-            SemiMap::get(SceneClass::NAME) = std::move(scene);
-        }(), ...);
+        ([]{SemiMap::get(SceneClass::NAME) = std::make_shared<SceneClass>();}(), ...);
     }
 
     template<Scene::Concept::Scene Scene>
@@ -57,7 +54,7 @@ public:
         while (this->window.isClose()) {
             // TODO: key
 
-            if(this->selectedScene->nextScene != nullptr) {
+            if(this->selectedScene->wantTransition()) {
                 this->transition(this->selectedScene->nextScene);
             }
 

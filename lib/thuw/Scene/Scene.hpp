@@ -21,8 +21,6 @@ namespace thuw::Scene {
 
 class thuw::Scene::SceneInterface {
 public:
-    static constexpr char* NAME = "";
-
     // TODO: connections
 
     virtual constexpr char* name() = 0;
@@ -38,14 +36,20 @@ private:
     using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
 public:
+    static constexpr char* NAME = "";
+
     std::shared_ptr<AbstractScene> nextScene = nullptr;
 
     template<typename SceneName>
-    constexpr void transition(SceneName name) {
-        assert(name() != SceneInterface::NAME);
+    constexpr void transition(SceneName name) noexcept {
+        assert(name() != Transitioner::NAME);
         assert(SemiMap::contains(name));
 
         this->nextScene = SemiMap::get(name);
+    }
+
+    [[nodiscard]] bool wantTransition() const noexcept {
+        return this->nextScene != nullptr;
     }
 };
 
