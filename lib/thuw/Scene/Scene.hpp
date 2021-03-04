@@ -19,7 +19,6 @@ namespace thuw::Scene {
     class Transitioner;
 }
 
-// TODO: interface?
 class thuw::Scene::SceneInterface {
 public:
     static constexpr char* NAME = "";
