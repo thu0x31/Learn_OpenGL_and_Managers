@@ -11,6 +11,8 @@
     #include <cassert>
 #endif
 
+#define ID(x) []() constexpr { return x; }
+
 namespace thuw::Scene {
     class AbstractScene;
     class SceneInterface;
@@ -39,12 +41,11 @@ private:
 public:
     std::shared_ptr<AbstractScene> nextScene = nullptr;
 
-    #define ID(x) []() constexpr { return x; }
-
     template<typename SceneName>
-    void transition(SceneName name) {
+    constexpr void transition(SceneName name) {
         assert(name() != SceneInterface::NAME);
         assert(SemiMap::contains(name));
+
         this->nextScene = SemiMap::get(name);
     }
 };
