@@ -25,18 +25,18 @@ package Scene {
     Scene::Manager "n" o-- "1" Scene
 
     Scene <|- AbstractScene
-    class AbstractScene {
+    abstract AbstractScene {
     }
 
     AbstractScene  <|- SceneInterface
-    class SceneInterface {
+    interface SceneInterface {
         setup()
         update()
         preTransition()
     }
 
     AbstractScene "1" <|- "1" Trasitioner
-    class Trasitioner {
+    abstract Trasitioner {
         transition()
     }
 }
