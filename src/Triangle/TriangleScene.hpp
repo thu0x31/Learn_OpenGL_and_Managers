@@ -8,7 +8,7 @@
     #include <ostream>
 #endif
 
-class TriangleScene final : public thuw::Scene::AbstructScene {     
+class TriangleScene final : public thuw::Scene::AbstractScene {     
 public:
     static constexpr char* NAME = "Triangle";
     constexpr char* name()  { return NAME; }

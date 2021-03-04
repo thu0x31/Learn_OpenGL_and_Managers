@@ -12,7 +12,7 @@
 #endif
 
 namespace thuw::Scene {
-    class AbstructScene;
+    class AbstractScene;
     class SceneInterface;
     class Transitioner;
 }
@@ -34,10 +34,10 @@ public:
 
 class thuw::Scene::Transitioner {
 private:
-    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstructScene>>;
+    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
 public:
-    std::shared_ptr<AbstructScene> nextScene = nullptr;
+    std::shared_ptr<AbstractScene> nextScene = nullptr;
 
     #define ID(x) []() constexpr { return x; }
 
@@ -49,6 +49,6 @@ public:
     }
 };
 
-class thuw::Scene::AbstructScene : 
+class thuw::Scene::AbstractScene : 
     public SceneInterface, 
     public Transitioner {};

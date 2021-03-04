@@ -26,16 +26,16 @@ namespace thuw::Scene {
 template<thuw::Scene::Concept::ScenePack ...SceneClass>
 class thuw::Scene::Manager {
 private:
-    std::shared_ptr<AbstructScene> selectedScene = nullptr;
+    std::shared_ptr<AbstractScene> selectedScene = nullptr;
     // TODO: need Tag, Tag = window.title
-    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstructScene>>;
+    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
     //TODO: emscripten
     const thuw::Window window;
 
 public:
     Manager(const Window& targetWindow) noexcept : window(targetWindow) {
-        (assert(SceneClass::NAME != AbstructScene::NAME), ...);
+        (assert(SceneClass::NAME != AbstractScene::NAME), ...);
 
         ([&]{
             auto&& scene = std::make_shared<SceneClass>();
@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    void transition(std::shared_ptr<AbstructScene>& trasitionScene) noexcept {
+    void transition(std::shared_ptr<AbstractScene>& trasitionScene) noexcept {
         //TODO: preTrandition
         this->selectedScene = std::move(trasitionScene);
         this->selectedScene->setup();

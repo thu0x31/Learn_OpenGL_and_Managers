@@ -10,7 +10,7 @@
     #include <ostream>
 #endif
 
-class FirstScene final : public thuw::Scene::AbstructScene {
+class FirstScene final : public thuw::Scene::AbstractScene {
 public:
     static constexpr char* NAME = "First";
     constexpr char* name() { return NAME; }
