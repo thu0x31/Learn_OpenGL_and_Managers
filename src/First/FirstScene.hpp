@@ -1,4 +1,5 @@
 #pragma once
+#include "Triangle/TriangleScene.hpp"
 #include "thuw/Scene/Scene.hpp"
 #include "thuw/Scene/Manager.hpp"
 #include "thuw/Keyboard/Key.hpp"
@@ -9,12 +10,11 @@
     #include <ostream>
 #endif
 
-class FirstScene final : public thuw::Scene::SceneInterface {
+class FirstScene final : public thuw::Scene::AbstructScene {
 public:
-    // TODO: interface no constructa wo yobidasubeki dehanai kamo?
-    using thuw::Scene::SceneInterface::SceneInterface;
     static constexpr char* NAME = "First";
     constexpr char* name() { return NAME; }
+    // thuw::Key key;
     
     void setup() {
         #ifndef NDEBUG
@@ -22,12 +22,14 @@ public:
         #endif
         glClearColor(0.2,0.5, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // key("e", []{
+        //     this->transition("Triangle");
+        // })
+        // this->key = thuw::Key('e');
     }
 
     void update() {
-        thuw::key::press(this->targetWindow, GLFW_KEY_ESCAPE, []{
-            thuw::Scene::transition("Triangle");
-        });
+        this->transition(ID("Triangle"));
     }
-
 };

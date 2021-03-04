@@ -2,24 +2,30 @@
 #include "thuw/Window/Window.hpp"
 #include <GLFW/glfw3.h>
 #include <functional>
+#include "boost/signals2.hpp"
+#include <functional>
 
-namespace thuw::key {
+namespace thuw {
+    class Key;
+}
 
-    void release(const thuw::Window& window, const int key, std::function<void(void)> callback) {
-        if(glfwGetKey(window.glfwWwindow(), key) == GLFW_RELEASE) {
-            callback();
-        }
+class thuw::Key {
+public:
+    boost::signals2::signal<void(GLFWwindow* window, const char key)> signal;
+    const char key;
+
+    Key(const char key) noexcept : key(key) {}
+    // Key() noexcept {};
+
+    [[nodiscard]] bool isPressed(GLFWwindow* window) noexcept {
+        return glfwGetKey(window, this->key);
     }
 
-    // TODO: key name dehanaku koudou ni awaseru
-    // TODO: emscripten
-    void press(const thuw::Window& window, const int key, std::function<void(void)> callback) noexcept {
-        if(glfwGetKey(window.glfwWwindow(), key) == GLFW_PRESS) {
-            callback();
-        }
-    }
-
-    // void repeat(const int key, std::function<void(void)> callback) {
-
+    // // TODO: key name dehanaku koudou ni awaseru
+    // // TODO: emscripten
+    // inline void press(const thuw::Window& window, const int key, std::function<void(void)> callback) noexcept {
+    //     if(glfwGetKey(window.glfwWwindow(), key) == GLFW_PRESS) {
+    //         callback();
+    //     }
     // }
 };

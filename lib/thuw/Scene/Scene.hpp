@@ -1,20 +1,54 @@
 #pragma once
 #include "thuw/Window/Window.hpp"
+#include "Concept.hpp"
+#include <array>
+#include <functional>
+#include <memory>
+#include <string>
+#include "semimap/semimap.h"
+
+#ifndef NDEBUG
+    #include <cassert>
+#endif
 
 namespace thuw::Scene {
+    class AbstructScene;
     class SceneInterface;
+    class Transitioner;
 }
 
-//TODO: interface?
+// TODO: interface?
 class thuw::Scene::SceneInterface {
 public:
-    //TODO: interface ni motasetakunai 
-    const Window targetWindow;
+    static constexpr char* NAME = "";
 
-    SceneInterface(const Window& window) : targetWindow(window){};
+    // TODO: connections
 
     virtual constexpr char* name() = 0;
-    virtual void setup() {};
-    virtual void update() {};
-    // virtual void save() {}; //シーンが遷移しても保存したいデータを処理する
+    virtual void setup() = 0; // TODO:
+    virtual void update() = 0;
+
+    // virtual void selected() = 0; // TODO:
+    // virtual void save() {}; // TODO: 
 };
+
+class thuw::Scene::Transitioner {
+private:
+    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstructScene>>;
+
+public:
+    std::shared_ptr<AbstructScene> nextScene = nullptr;
+
+    #define ID(x) []() constexpr { return x; }
+
+    template<typename SceneName>
+    void transition(SceneName name) {
+        assert(name() != SceneInterface::NAME);
+        assert(SemiMap::contains(name));
+        this->nextScene = SemiMap::get(name);
+    }
+};
+
+class thuw::Scene::AbstructScene : 
+    public SceneInterface, 
+    public Transitioner {};

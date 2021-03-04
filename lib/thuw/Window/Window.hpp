@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <iostream>
+#include <string>
 #include "thuw/Exception/throw_if.hpp"
 
 namespace thuw{
@@ -15,7 +16,7 @@ private:
 
 public:
     Window(const GLuint width, const GLuint height,
-            const char* title = "thuthuthu",
+            const std::string& title = "thuthuthu",
             const int majorVersion = 3, const int minorVersion = 3) noexcept
     {
         glfwInit();
@@ -36,8 +37,8 @@ private:
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minorVersion);
     }
 
-    GLFWwindow* createWindow(const GLuint& width, const GLuint& height, const char* title) noexcept {
-        const auto&& window = glfwCreateWindow(width, height, title, NULL, NULL);
+    GLFWwindow* createWindow(const GLuint& width, const GLuint& height, const std::string& title) noexcept {
+        const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
         try {
             thuw::throw_if(window == nullptr, "error: Failed to Create Window");
             glfwMakeContextCurrent(window);

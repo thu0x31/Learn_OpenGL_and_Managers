@@ -11,13 +11,10 @@ int main() {
     const auto&& window = thuw::Window(800,600);
 
     //TODO: window emscripten
-    thuw::Scene::Manager::create<
+    thuw::Scene::Manager<
             FirstScene,
             TriangleScene
-        >(window)
-    // ->targetingWindow(window) 
-    ->select(FirstScene::NAME)
-    ->update();
-
+        >(window).select<FirstScene>()->update();
+    
     return 0;
 }

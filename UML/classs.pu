@@ -4,43 +4,42 @@
 class GLFWWindow {
     emscriptenの場合不要
 }
-GLFWWindow -> Window
+GLFWWindow "1" -> "1" Window
 
 class Window {
-    windowラッパー
     setup([](){})
     update([](){} update)
 }
+' Window --> Scene
+' Window --> Geometry
 
 package Scene {
-    Window -> Scene::Manager
-    ' Window -- SceneManager
+    Window "1" -> "1" Scene::Manager
+    
     class Scene::Manager {
-        Scene::ManagerをSceneが持つことでSceneの遷移を容易にする
         map<id, SceneName>
         currentScene
-        bindScene(...Scene)
-        select()// preTransitionSceneを呼び出す
+        select()
+        transition()
     }
-    Scene::Manager o-- Scene
+    Scene::Manager "n" o-- "1" Scene
 
-' シーンを複数表示させたい場合は、シーン内でシーンを呼べばいい？
     class Scene {
-        SceneInterface
+    }
+
+    Scene "1" <|- "1" SceneInterface
+    class SceneInterface {
+        transition()
         setup()
         update()
-        end()
-        preTransitionScene() //シーン遷移前に呼ばれる
+        preTransition()
     }
-
-    ' class ScenLoader {
-    '     シーンからシーンへの遷移を橋渡しするクラス
-
-    ' }
-    ' ScenLoader "1" -- "1" Scene
 }
 
-package Keybord {
+package Keyboard {
+    ' 1 : n ? key('e')
+    ' 1 : 1 key().press('e')
+    Scene <-- Key 
     class Key {
         release(actionName, [](){})
         press(actionName, [](){})

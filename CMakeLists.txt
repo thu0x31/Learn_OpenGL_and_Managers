@@ -16,10 +16,19 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Og -g")
 
+
+# boost
+find_package(Boost QUIET REQUIRED COMPONENTS)
+if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Boost Not found")
+endif()
+
 target_include_directories(${PROJECT_NAME} PUBLIC
-                           "${CMAKE_SOURCE_DIR}/src"
-                           "${CMAKE_SOURCE_DIR}/lib"
-                           )
+                            "${CMAKE_SOURCE_DIR}/src"
+                            "${CMAKE_SOURCE_DIR}/lib"
+                            "${Boost_INCLUDE_DIR}"
+                            "${CMAKE_SOURCE_DIR}/lib/frozen/include"
+                            )
 
 # https://cmake.org/cmake/help/latest/module/FindOpenGL.html
 set(OpenGL_GL_PREFERENCE "GLVND")

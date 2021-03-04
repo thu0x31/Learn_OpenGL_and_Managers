@@ -1,5 +1,7 @@
 #pragma once
 #include <algorithm>
+#include <cstdio>
+#include <functional>
 #include <iterator>
 #include <memory>
 #include <unordered_map>
@@ -9,6 +11,7 @@
 #include "Concept.hpp"
 #include "thuw/Window/Window.hpp"
 
+
 #ifndef NDEBUG
     #include <iostream>
     #include <ostream>
@@ -16,93 +19,65 @@
 #endif
 
 namespace thuw::Scene {
+    template<thuw::Scene::Concept::ScenePack ...SceneClass>
     class Manager;
-
-    namespace Global {
-        // TODO: multiwindow taiou sitai, id wo hozon suru?
-        std::shared_ptr<Manager> sceneManager = nullptr;
-    }
-
-    void transition(const char* sceneName) noexcept;
 }
 
+template<thuw::Scene::Concept::ScenePack ...SceneClass>
 class thuw::Scene::Manager {
 private:
-    std::shared_ptr<SceneInterface> selectedScene;
-    //TODO: semimap
-    std::unordered_map<const char*, std::shared_ptr<SceneInterface>> sceneMap;
+    std::shared_ptr<AbstructScene> selectedScene = nullptr;
+    // TODO: need Tag, Tag = window.title
+    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstructScene>>;
 
     //TODO: emscripten
     const thuw::Window window;
 
 public:
-    Manager(const Window& targetWindow) noexcept : window(targetWindow) {};
+    Manager(const Window& targetWindow) noexcept : window(targetWindow) {
+        (assert(SceneClass::NAME != AbstructScene::NAME), ...);
 
-    template<thuw::Scene::Concept::ScenePack ...Scene>
-    static inline auto create(const Window& targetWindow) noexcept {
-        #ifndef NDEBUG
-            assert(Global::sceneManager == nullptr);
-        #endif
-
-        Global::sceneManager = std::make_shared<Manager>(targetWindow);
-        // Global::sceneManager->emplaceScene<Scene...>();
-        (Global::sceneManager->sceneMap.emplace(Scene::NAME, std::make_shared<Scene>(targetWindow)), ...);
-        return Global::sceneManager;
+        ([&]{
+            auto&& scene = std::make_shared<SceneClass>();
+            SemiMap::get(SceneClass::NAME) = std::move(scene);
+        }(), ...);
     }
 
-    // auto targetingWindow(const std::shared_ptr<thuw::Window>& window) noexcept {
-    //     this->window = window;
-    //     return this;
-    // }
-
-    template<Concept::Scene Scene>
+    template<Scene::Concept::Scene Scene>
     auto select() noexcept {
-        #ifndef NDEBUG
-            assert(this->sceneMap.contains(Scene::NAME));
-        #endif
+        assert(SemiMap::contains(Scene::NAME));
         
-        this->selectedScene = this->sceneMap[Scene::NAME];
+        this->selectedScene = SemiMap::get(Scene::NAME);
         this->selectedScene->setup();
 
         return this;
     }
 
-    auto select(const char* sceneName) noexcept {
-        #ifndef NDEBUG
-            assert(this->sceneMap.contains(sceneName));
-        #endif
-        
-        this->selectedScene = this->sceneMap[sceneName];
-        this->selectedScene->setup();
-
-        return this;
-    }
-
-    void update() const noexcept {
+    void update() noexcept {
         while (this->window.isClose()) {
+            // TODO: key
+
+            if(this->selectedScene->nextScene != nullptr) {
+                this->transition(this->selectedScene->nextScene);
+            }
+
             this->selectedScene->update();
-            
+
             glfwPollEvents();
             this->window.swapBuffers();
         }
-        glfwTerminate();
         this->window.close();
     }
-
-    // template<Concept::ScenePack ...Scene>
-    // void emplaceScene() noexcept {
-    //     (this->sceneMap.emplace(Scene::NAME, std::make_shared<Scene>()), ...);
-    // }
 
     auto targetWindow() const noexcept {
         return this->window;
     }
+
+private:
+    void transition(std::shared_ptr<AbstructScene>& trasitionScene) noexcept {
+        //TODO: preTrandition
+        this->selectedScene = std::move(trasitionScene);
+        this->selectedScene->setup();
+        //TODO: transitioned
+    }
 };
-
-// ----------------------------------------------------------
-
-inline void thuw::Scene::transition(const char* sceneName) noexcept {
-    //TODO: preTrandition
-    Global::sceneManager->select(sceneName);
-    //TODO: transitioned
-}
