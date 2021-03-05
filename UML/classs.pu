@@ -17,9 +17,15 @@ package Scene {
     Window "1" -> "1" Scene::Manager
     
     class Scene::Manager {
-        map<id, SceneName>
-        currentScene
+        'compile time
+        map<id, Scene*> sceneList 
+        ' str?
+        Scene* currentScene
+        Window
+
         select()
+        setup()
+        update()
         transition()
     }
     Scene::Manager "n" o-- "1" Scene
