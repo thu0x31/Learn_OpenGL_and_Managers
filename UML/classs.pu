@@ -43,6 +43,7 @@ package Scene {
 
     AbstractScene "1" <|- "1" Trasitioner
     abstract Trasitioner {
+        SceneId
         transition()
     }
 }
@@ -50,7 +51,9 @@ package Scene {
 package Keyboard {
     ' 1 : n ? key('e')
     ' 1 : 1 key().press('e')
+    
     class Key {
+        keyName
         release(actionName, [](){})
         press(actionName, [](){})
         repeat(actionName, [](){})

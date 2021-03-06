@@ -10,8 +10,8 @@
 
 class TriangleScene final : public thuw::Scene::AbstractScene {     
 public:
-    static constexpr char* NAME = "Triangle";
-    constexpr char* name()  { return NAME; }
+    static constexpr auto Id = SceneId("Triangle");
+    const char* name()  { return Id(); }
 
     void setup() {
         #ifndef NDEBUG
@@ -26,6 +26,6 @@ public:
         // thuw::Key::press(this->targetWindow, GLFW_KEY_ESCAPE, [&]{
         //     this->targetWindow.close();
         // });
-        // this->transition(ID("First"));
+        this->transition(SceneId("First"));
     }
 };

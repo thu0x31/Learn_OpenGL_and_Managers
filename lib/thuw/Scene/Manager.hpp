@@ -35,22 +35,23 @@ private:
 
 public:
     Manager(const Window& targetWindow) noexcept : window(targetWindow) {
-        (assert(SceneClass::NAME != AbstractScene::NAME), ...);
+        (assert(SceneClass::Id() != AbstractScene::Id()), ...);
 
-        ([]{SemiMap::get(SceneClass::NAME) = std::make_shared<SceneClass>();}(), ...);
+        ([]{SemiMap::get(SceneClass::Id) = std::make_shared<SceneClass>();}(), ...);
     }
 
     template<Scene::Concept::Scene Scene>
     auto select() noexcept {
-        assert(SemiMap::contains(Scene::NAME));
+        assert(SemiMap::contains(Scene::Id));
         
-        this->selectedScene = SemiMap::get(Scene::NAME);
+        this->selectedScene = SemiMap::get(Scene::Id);
         this->selectedScene->setup();
 
         return this;
     }
 
     void update() noexcept {
+        // TODO: emscripten
         while (this->window.isClose()) {
             // TODO: key
 

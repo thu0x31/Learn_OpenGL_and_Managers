@@ -12,9 +12,11 @@
 
 class FirstScene final : public thuw::Scene::AbstractScene {
 public:
-    static constexpr char* NAME = "First";
-    constexpr char* name() { return NAME; }
+    static constexpr auto Id = SceneId("First");
+    const char* name()  { return Id(); }
     // thuw::Key key;
+
+    static constexpr int id = 0;
     
     void setup() {
         #ifndef NDEBUG
@@ -30,6 +32,6 @@ public:
     }
 
     void update() {
-        this->transition(ID("Triangle"));
+        this->transition(TriangleScene::Id);
     }
 };

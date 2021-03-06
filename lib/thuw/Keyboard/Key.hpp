@@ -9,20 +9,20 @@ namespace thuw {
     class Key;
 }
 
+// TODO: emscripten
 class thuw::Key {
 public:
     boost::signals2::signal<void(GLFWwindow* window, const char key)> signal;
-    const char key;
+    char key;
 
-    Key(const char key) noexcept : key(key) {}
-    // Key() noexcept {};
+    // Key(const char key) noexcept : key(key) {}
+    Key() noexcept {};
 
-    [[nodiscard]] bool isPressed(GLFWwindow* window) noexcept {
+    [[nodiscard]] bool isPress(GLFWwindow* window) noexcept {
         return glfwGetKey(window, this->key);
     }
 
     // // TODO: key name dehanaku koudou ni awaseru
-    // // TODO: emscripten
     // inline void press(const thuw::Window& window, const int key, std::function<void(void)> callback) noexcept {
     //     if(glfwGetKey(window.glfwWwindow(), key) == GLFW_PRESS) {
     //         callback();

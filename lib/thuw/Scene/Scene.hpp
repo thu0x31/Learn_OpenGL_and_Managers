@@ -11,7 +11,7 @@
     #include <cassert>
 #endif
 
-#define ID(x) []() constexpr { return x; }
+#define SceneId(x) []() constexpr { return x; }
 
 namespace thuw::Scene {
     class AbstractScene;
@@ -23,7 +23,7 @@ class thuw::Scene::SceneInterface {
 public:
     // TODO: connections
 
-    virtual constexpr char* name() = 0;
+    virtual const char* name() = 0;
     virtual void setup() = 0; // TODO:
     virtual void update() = 0;
 
@@ -36,16 +36,16 @@ private:
     using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
 public:
-    static constexpr char* NAME = "";
+    static constexpr auto Id = SceneId("");
 
     std::shared_ptr<AbstractScene> nextScene = nullptr;
 
-    template<typename SceneName>
-    constexpr void transition(SceneName name) noexcept {
-        assert(name() != Transitioner::NAME);
-        assert(SemiMap::contains(name));
+    template<typename SceneId>
+    constexpr void transition(SceneId id) noexcept {
+        assert(id() != Transitioner::Id());
+        assert(SemiMap::contains(id));
 
-        this->nextScene = SemiMap::get(name);
+        this->nextScene = SemiMap::get(id);
     }
 
     [[nodiscard]] bool wantTransition() const noexcept {

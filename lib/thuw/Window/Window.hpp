@@ -32,12 +32,12 @@ public:
     }
 
 private:
-    void contextVersion(const int& majorVersion, const int& minorVersion) const noexcept {
+    void contextVersion(const int majorVersion, const int minorVersion) const noexcept {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, majorVersion);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minorVersion);
     }
 
-    GLFWwindow* createWindow(const GLuint& width, const GLuint& height, const std::string& title) noexcept {
+    [[nodiscard]] GLFWwindow* createWindow(const GLuint width, const GLuint height, const std::string& title) noexcept {
         const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
         try {
             thuw::throw_if(window == nullptr, "error: Failed to Create Window");
@@ -58,7 +58,7 @@ private:
     }
 
 public:
-    bool isClose() const noexcept {
+    [[nodiscard]] bool isClose() const noexcept {
         return !glfwWindowShouldClose(this->window);
     }
 
@@ -70,7 +70,7 @@ public:
         glfwSetWindowShouldClose(this->window, true);
     }
 
-    auto glfwWwindow() const noexcept {
+    [[nodiscard]] auto glfwWwindow() const noexcept {
         return this->window;
     }
 
