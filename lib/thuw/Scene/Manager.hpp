@@ -26,8 +26,9 @@ template<thuw::Scene::Concept::ScenePack ...SceneClass>
 class thuw::Scene::Manager {
 private:
     std::shared_ptr<AbstractScene> selectedScene = nullptr;
+
     // TODO: need Tag, Tag = window.title
-    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
+    using StaticMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
     //TODO: emscripten
     const thuw::Window window;
@@ -36,14 +37,14 @@ public:
     Manager(const Window& targetWindow) noexcept : window(targetWindow) {
         (assert(SceneClass::Id() != AbstractScene::Id()), ...);
 
-        ([]{SemiMap::get(SceneClass::Id) = std::make_shared<SceneClass>();}(), ...);
+        ([]{StaticMap::get(SceneClass::Id) = std::make_shared<SceneClass>();}(), ...);
     }
 
     template<Scene::Concept::Scene Scene>
     auto select() noexcept {
-        assert(SemiMap::contains(Scene::Id));
+        assert(StaticMap::contains(Scene::Id));
         
-        this->selectedScene = SemiMap::get(Scene::Id);
+        this->selectedScene = StaticMap::get(Scene::Id);
         this->selectedScene->setup();
 
         return this;

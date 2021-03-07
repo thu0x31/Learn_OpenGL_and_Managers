@@ -33,7 +33,7 @@ public:
 
 class thuw::Scene::Transitioner {
 private:
-    using SemiMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
+    using StaticMap = semi::static_map<std::string, std::shared_ptr<AbstractScene>>;
 
 public:
     static constexpr auto Id = SceneId("");
@@ -43,9 +43,9 @@ public:
     template<typename SceneId>
     constexpr void transition(SceneId id) noexcept {
         assert(id() != Transitioner::Id());
-        assert(SemiMap::contains(id));
+        assert(StaticMap::contains(id));
 
-        this->nextScene = SemiMap::get(id);
+        this->nextScene = StaticMap::get(id);
     }
 
     [[nodiscard]] bool wantTransition() const noexcept {
@@ -53,6 +53,7 @@ public:
     }
 };
 
+// TODO: template de hituyouna system dakece kousei dekiru youni suru
 class thuw::Scene::AbstractScene : 
     public SceneInterface, 
     public Transitioner {};
