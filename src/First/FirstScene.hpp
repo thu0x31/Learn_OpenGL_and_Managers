@@ -13,7 +13,7 @@
 class FirstScene final : public thuw::Scene::AbstractScene {
 public:
     static constexpr auto Id = SceneId("First");
-    const char* name()  { return Id(); }
+    constexpr const char* name()  { return Id(); }
     // thuw::Key key;
 
     static constexpr int id = 0;

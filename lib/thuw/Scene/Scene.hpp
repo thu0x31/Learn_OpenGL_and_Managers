@@ -23,7 +23,7 @@ class thuw::Scene::SceneInterface {
 public:
     // TODO: connections
 
-    virtual const char* name() = 0;
+    virtual constexpr const char* name() = 0;
     virtual void setup() = 0; // TODO:
     virtual void update() = 0;
 

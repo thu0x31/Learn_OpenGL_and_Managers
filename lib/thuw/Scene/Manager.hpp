@@ -11,7 +11,6 @@
 #include "Concept.hpp"
 #include "thuw/Window/Window.hpp"
 
-
 #ifndef NDEBUG
     #include <iostream>
     #include <ostream>
@@ -56,7 +55,7 @@ public:
             // TODO: key
 
             if(this->selectedScene->wantTransition()) {
-                this->transition(this->selectedScene->nextScene);
+                this->transition();
             }
 
             this->selectedScene->update();
@@ -72,9 +71,9 @@ public:
     }
 
 private:
-    void transition(std::shared_ptr<AbstractScene>& trasitionScene) noexcept {
+    void transition() noexcept {
         //TODO: preTrandition
-        this->selectedScene = std::move(trasitionScene);
+        this->selectedScene = std::move(this->selectedScene->nextScene);
         this->selectedScene->setup();
         //TODO: transitioned
     }
