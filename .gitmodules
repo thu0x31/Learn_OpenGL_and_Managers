@@ -1,6 +1,0 @@
-[submodule "lib/semimap"]
-	path = lib/semimap
-	url = https://github.com/hogliux/semimap.git
-[submodule "lib/eternal"]
-	path = lib/eternal
-	url = https://github.com/mapbox/eternal.git
