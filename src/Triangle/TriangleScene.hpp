@@ -1,5 +1,4 @@
 #pragma once
-#include "thuw/Scene/Manager.hpp"
 #include "thuw/Scene/Scene.hpp"
 #include "thuw/Keyboard/Key.hpp"
 
@@ -8,14 +7,13 @@
     #include <ostream>
 #endif
 
-class TriangleScene final : public thuw::Scene::AbstractScene {     
+class TriangleScene final : public thuw::Scene::SceneInterface {
 public:
-    static constexpr auto Id = SceneId("Triangle");
-    constexpr const char* name()  { return Id(); }
+    static constexpr auto Name = "Triangle";
 
     void setup() {
         #ifndef NDEBUG
-            std::cout << this->name() << std::endl;
+            std::cout << this->Name << std::endl;
         #endif
 
         glClearColor(0.5,0.5, 0.2, 1.);
@@ -23,9 +21,5 @@ public:
     }
 
     void update() {
-        // thuw::Key::press(GLFW_KEY_ESCAPE, [&]{
-        //     this->targetWindow.close();
-        // });
-        this->transition(SceneId("First"));
     }
 };

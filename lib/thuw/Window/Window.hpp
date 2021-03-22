@@ -38,19 +38,22 @@ private:
     }
 
     [[nodiscard]] GLFWwindow* createWindow(const GLuint width, const GLuint height, const std::string& title) noexcept {
-        const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
         try {
+            const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
             thuw::throw_if(window == nullptr, "error: Failed to Create Window");
             glfwMakeContextCurrent(window);
 
             const auto&& isLoaded = !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
             thuw::throw_if(isLoaded, "error: Failed to initialize GLAD");
+
+            glViewport(0, 0, width, height);
+
+            return window;
         } catch (std::exception& e) {
             std::cout << e.what() << std::endl;
         }
 
-        glViewport(0, 0, width, height);
-        return window;
+        return nullptr;
     }
 
     void setCallbacks() noexcept {

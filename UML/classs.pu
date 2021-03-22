@@ -14,36 +14,31 @@ class Window {
 ' Window --> Geometry
 
 package Scene {
-    Window "1" -> "1" Scene::Manager
-    
-    class Scene::Manager {
-        'compile time
-        map<id, Scene*> sceneList 
-        ' str?
+
+    class Scene::List {
+        map<id, Scene*> sceneList
         Scene* currentScene
+    }
+    Scene::List "n" o-- "1" Scene
+    
+    class Scene::Render {
         Window
-
-        select()
-        setup()
-        update()
-        transition()
+        Scene::List
+        loop()
     }
-    Scene::Manager "n" o-- "1" Scene
+    Window "1" -> "1" Scene::Render
+    Scene::List "1" -> "1" Scene::Render
 
-    Scene <|- AbstractScene
-    abstract AbstractScene {
-    }
-
-    AbstractScene  <|- SceneInterface
+    Scene <|- SceneInterface
     interface SceneInterface {
         setup()
         update()
         preTransition()
     }
 
-    AbstractScene "1" <|- "1" Trasitioner
+    Scene <-- Trasitioner
     abstract Trasitioner {
-        SceneId
+        Scene::List
         transition()
     }
 }
