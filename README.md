@@ -1,4 +1,5 @@
 CMake, make, clang, c++20, emscripten
+Header only
 
 make compile_commands.json
 ```
