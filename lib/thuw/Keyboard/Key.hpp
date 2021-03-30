@@ -36,13 +36,6 @@ public:
         }
     }
 
-    // // TODO: key name dehanaku koudou ni awaseru
-    // inline void press(const thuw::Window& window, const int key, std::function<void(void)> callback) noexcept {
-    //     if(glfwGetKey(window.glfwWwindow(), key) == GLFW_PRESS) {
-    //         callback();
-    //     }
-    // }
-
     enum : int {
         UNKNOWN            = -1,
         SPACE              = 32,
