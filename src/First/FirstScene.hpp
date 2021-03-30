@@ -12,10 +12,16 @@
 
 class FirstScene final : public thuw::Scene::SceneInterface {
 public:
-    static constexpr auto Name = "First";
+    static constexpr auto Name = "First";// TODO: 存在を保証されない
     thuw::Scene::Transitioner transition;
+    thuw::Key key;
 
-    FirstScene(thuw::Scene::Transitioner transition) : transition(transition) {}
+    FirstScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
+     : transition(transition), key(key) {
+        this->key.pressed<thuw::Key::E>([&]{
+            this->transition("Triangle");
+        });
+    }
     
     void setup() noexcept {
         #ifndef NDEBUG
@@ -23,11 +29,9 @@ public:
         #endif
         glClearColor(0.2,0.5, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        // thuw::Key::press(GLFWwindow *window);
     }
 
     void update() {
-        this->transition("Triangle");
+        this->key.update();
     }
 };

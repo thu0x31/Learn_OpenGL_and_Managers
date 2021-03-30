@@ -30,7 +30,6 @@ public:
         this->sceneList->choose(Scene::Name)->setup();
 
         while (this->window.isClose()) {
-            // TODO: key
 
             this->sceneList->current()->update();
 

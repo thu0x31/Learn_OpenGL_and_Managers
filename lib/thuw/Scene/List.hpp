@@ -1,11 +1,9 @@
-
-
+#pragma once
 #include "thuw/Scene/Scene.hpp"
 #include <cassert>
 #include <initializer_list>
 #include <string>
 #include <utility>
-#pragma once
 #include <memory>
 #include <unordered_map>
 
@@ -19,26 +17,27 @@ private:
     std::unordered_map<std::string, std::shared_ptr<SceneInterface>> sceneMap;
 
 public:
-    List() {}
+    List() {
+    }
 
     template<typename ...Scene>
-    void emplace(const Scene ...scene) {
+    void emplace(const Scene ...scene) noexcept {
         (this->sceneMap.emplace(Scene::Name, std::make_shared<Scene>(scene)), ...);
     }
 
-    auto operator[](const std::string name) {
+    [[nodiscard]] auto operator[](const std::string name) noexcept {
         assert(this->sceneMap.contains(name));
 
         return this->sceneMap[name];
     }
 
-    auto current() const {
+    [[nodiscard]] auto current() const noexcept {
         assert(this->currentScene != nullptr);
 
         return this->currentScene;
     }
 
-    auto choose(const std::string name) {
+    auto choose(const std::string name) noexcept {
         assert(this->sceneMap.contains(name));
 
         this->currentScene = this->sceneMap[name];

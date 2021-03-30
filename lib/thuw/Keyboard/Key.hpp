@@ -2,23 +2,38 @@
 #include "thuw/Window/Window.hpp"
 #include <GLFW/glfw3.h>
 #include <functional>
-#include "boost/signals2.hpp"
-#include <functional>
+#include <utility>
+#include <vector>
 
 namespace thuw {
     class Key;
 }
 
 class thuw::Key {
-    // TODO: scene 1:1
-    boost::signals2::signal<void(int)> signalPressed;
+private:
+    GLFWwindow* glfwWindow;
+    std::vector<std::pair<const int, const std::function<void()>>> pressedFunctionList;
 
-    template<int Key>
-    void pressed(std::function<void(int)> callback) noexcept {
-        
+public:
+    Key(GLFWwindow* window) : glfwWindow(window) {}
+
+    Key(const thuw::Window& window) {
+        this->glfwWindow = window.glfwWwindow();
     }
 
-    void press(GLFWwindow* window) noexcept {
+    template<int Key>
+    void pressed(const std::function<void()>& callback) noexcept {
+        static_assert(Key >= UNKNOWN, "Unknown key");
+        
+        this->pressedFunctionList.push_back(std::make_pair(Key, callback));
+    }
+
+    void update() noexcept {
+        for(const auto& keyFuncPair : this->pressedFunctionList) {
+            if(glfwGetKey(this->glfwWindow, keyFuncPair.first) == GLFW_PRESS) {
+                keyFuncPair.second();
+            }
+        }
     }
 
     // // TODO: key name dehanaku koudou ni awaseru
