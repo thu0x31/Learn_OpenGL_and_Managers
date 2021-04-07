@@ -9,10 +9,11 @@ namespace thuw {
     class Key;
 }
 
+// TODO: key goto ni suruka, key no syuugou to suruka
 class thuw::Key {
 private:
     GLFWwindow* glfwWindow;
-    std::vector<std::pair<const int, const std::function<void()>>> pressedFunctionList;
+    std::vector<std::pair<const int, const std::function<void()>>> pressedFunctions;
 
 public:
     Key(GLFWwindow* window) : glfwWindow(window) {}
@@ -22,14 +23,14 @@ public:
     }
 
     template<int Key>
-    void pressed(const std::function<void()>& callback) noexcept {
+    void pressed(const std::function<void()>& callback) {
         static_assert(Key >= UNKNOWN, "Unknown key");
         
-        this->pressedFunctionList.push_back(std::make_pair(Key, callback));
+        this->pressedFunctions.push_back(std::make_pair(Key, callback));
     }
 
-    void update() noexcept {
-        for(const auto& keyFuncPair : this->pressedFunctionList) {
+    void update() {
+        for(const auto& keyFuncPair : this->pressedFunctions) {
             if(glfwGetKey(this->glfwWindow, keyFuncPair.first) == GLFW_PRESS) {
                 keyFuncPair.second();
             }
