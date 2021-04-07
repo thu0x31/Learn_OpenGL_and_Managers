@@ -11,7 +11,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 set(CMAKE_CXX_FLAGS "-stdlib=libstdc++")
 # set(CMAKE_CXX_FLAGS "-stdlib=libc++")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -v -Wall -Wextra -Wno-long-long -Wnoexcept -pedantic")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -v -Wall -Wextra -Wno-long-long -Wnoexcept -pedantic -fno-exceptions -fno-rtti")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Og -g")

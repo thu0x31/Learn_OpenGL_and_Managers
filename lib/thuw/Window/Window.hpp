@@ -1,10 +1,10 @@
 #pragma once
+#include <cassert>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <iostream>
 #include <string>
-#include "thuw/Exception/throw_if.hpp"
 
 namespace thuw{
     class Window;
@@ -38,22 +38,16 @@ private:
     }
 
     [[nodiscard]] GLFWwindow* createWindow(const GLuint width, const GLuint height, const std::string& title) noexcept {
-        try {
-            const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-            thuw::throw_if(window == nullptr, "error: Failed to Create Window");
-            glfwMakeContextCurrent(window);
+        const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+        assert(window != nullptr);
+        glfwMakeContextCurrent(window);
 
-            const auto&& isLoaded = !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-            thuw::throw_if(isLoaded, "error: Failed to initialize GLAD");
+        const auto&& isLoaded = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        assert(isLoaded);
 
-            glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height);
 
-            return window;
-        } catch (std::exception& e) {
-            std::cout << e.what() << std::endl;
-        }
-
-        return nullptr;
+        return window;
     }
 
     void setCallbacks() noexcept {

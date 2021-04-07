@@ -17,7 +17,7 @@ int main() {
     auto&& transitioner = thuw::Scene::Transitioner(sceneList);//TODO: 
     sceneList->emplace(
         FirstScene(transitioner, key),
-        TriangleScene()
+        TriangleScene(transitioner, key)
     );
 
     thuw::Scene::Render(window, sceneList).loop<FirstScene>();
