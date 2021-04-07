@@ -17,7 +17,7 @@ private:
 public:
     Window(const GLuint width, const GLuint height,
             const std::string& title = "thuthuthu",
-            const int majorVersion = 3, const int minorVersion = 3) noexcept
+            const int majorVersion = 3, const int minorVersion = 3) 
     {
         glfwInit();
         this->contextVersion(majorVersion, minorVersion);
@@ -32,12 +32,12 @@ public:
     }
 
 private:
-    void contextVersion(const int majorVersion, const int minorVersion) const noexcept {
+    void contextVersion(const int majorVersion, const int minorVersion) const {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, majorVersion);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minorVersion);
     }
 
-    [[nodiscard]] GLFWwindow* createWindow(const GLuint width, const GLuint height, const std::string& title) noexcept {
+    [[nodiscard]] GLFWwindow* createWindow(const GLuint width, const GLuint height, const std::string& title) {
         const auto&& window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
         assert(window != nullptr);
         glfwMakeContextCurrent(window);
@@ -50,29 +50,29 @@ private:
         return window;
     }
 
-    void setCallbacks() noexcept {
+    void setCallbacks() {
         glfwSetFramebufferSizeCallback(this->window, Window::resize);
     }
 
 public:
-    [[nodiscard]] bool isClose() const noexcept {
+    [[nodiscard]] bool isClose() const {
         return !glfwWindowShouldClose(this->window);
     }
 
-    void swapBuffers() const noexcept {
+    void swapBuffers() const {
         glfwSwapBuffers(this->window);
     }
     
-    void close() const noexcept {
+    void close() const {
         glfwSetWindowShouldClose(this->window, true);
     }
 
-    [[nodiscard]] auto glfwWwindow() const noexcept {
+    [[nodiscard]] auto glfwWwindow() const {
         return this->window;
     }
 
 private:
-    static void resize(GLFWwindow* , int width, int height) noexcept {
+    static void resize(GLFWwindow* , int width, int height) {
         glViewport(0, 0, width, height);
     }
 };

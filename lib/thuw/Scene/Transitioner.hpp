@@ -15,11 +15,11 @@ struct thuw::Scene::Transitioner {
 public:
     Transitioner(const std::shared_ptr<thuw::Scene::List>& sceneList) : sceneList(sceneList) {}
 
-    void operator()(const std::string& name) noexcept {
+    void operator()(const std::string& name) {
         this->sceneList->choose(name)->setup();
     }
 
-    void transition(const std::string& name) noexcept {
+    void transition(const std::string& name) {
         this->sceneList->choose(name)->setup();
     }
 };

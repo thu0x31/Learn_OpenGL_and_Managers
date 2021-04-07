@@ -21,12 +21,12 @@ private:
     const thuw::Window window;
     const std::shared_ptr<thuw::Scene::List> sceneList;
 public:
-    Render(const Window& targetWindow, std::shared_ptr<thuw::Scene::List>& sceneList) noexcept
+    Render(const Window& targetWindow, std::shared_ptr<thuw::Scene::List>& sceneList) 
     : window(targetWindow), sceneList(sceneList) {}
 
     // TODO: emscripten
     template<class Scene>
-    void loop() noexcept {
+    void loop() {
         this->sceneList->choose(Scene::Name)->setup();
 
         while (this->window.isClose()) {

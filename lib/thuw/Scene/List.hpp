@@ -21,23 +21,23 @@ public:
     }
 
     template<typename ...Scene>
-    void emplace(const Scene ...scene) noexcept {
+    void emplace(const Scene ...scene) {
         (this->sceneMap.emplace(Scene::Name, std::make_shared<Scene>(scene)), ...);
     }
 
-    [[nodiscard]] auto operator[](const std::string name) noexcept {
+    [[nodiscard]] auto operator[](const std::string name) {
         assert(this->sceneMap.contains(name));
 
         return this->sceneMap[name];
     }
 
-    [[nodiscard]] auto current() const noexcept {
+    [[nodiscard]] auto current() const {
         assert(this->currentScene != nullptr);
 
         return this->currentScene;
     }
 
-    auto choose(const std::string name) noexcept {
+    auto choose(const std::string name) {
         assert(this->sceneMap.contains(name));
 
         this->currentScene = this->sceneMap[name];
