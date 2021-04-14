@@ -36,8 +36,5 @@ public:
 
     void update() {
         this->key.update();
-
-        unsigned int VBO;
-        glGenBuffers(1, &VBO);
     }
 };

@@ -1,11 +1,15 @@
 #pragma once
 
-
+#include "glad/glad.h"
 #include "thuw/Scene/Scene.hpp"
 #include "thuw/Keyboard/Key.hpp"
 #include "thuw/Scene/Transitioner.hpp"
-#include "thuw/Vertex/Shader.hpp"
+#include "thuw/Shader/Vertex.hpp"
+#include "thuw/Shader/Fragment.hpp"
+#include "thuw/Shader/Program.hpp"
 #include "thuw/Vertex/VBO.hpp"
+#include "thuw/VAO.hpp"
+#include <array>
 #include <string>
 #include <vector>
 
@@ -19,29 +23,15 @@ public:
     static constexpr auto Name = "Triangle";
     thuw::Scene::Transitioner transition;
     thuw::Key key;
-
-    thuw::Vertex::Shader vertexShader;
-    thuw::Vertex::VBO vbo;
+    // thuw::Shader::Program program;
+    // thuw::VAO vao;
 
     TriangleScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
-     : transition(transition), key(key) , vertexShader(thuw::Vertex::Shader())
+     : transition(transition), key(key)
     {
         this->key.pressed<thuw::Key::W>([&]{
             this->transition("First");
         });
-
-        std::string currentFilePath(__FILE__);
-        currentFilePath.erase(
-            currentFilePath.begin() + currentFilePath.rfind("/"),
-            currentFilePath.end()
-        );
-
-        this->vbo = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
-        };
-        this->vertexShader = thuw::Vertex::Shader(currentFilePath + "/shader/triangle.vert");
     }
 
     void setup() {
@@ -51,9 +41,50 @@ public:
 
         glClearColor(0.5,0.5, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // TODO: 
+        std::string currentFilePath(__FILE__);
+        currentFilePath.erase(
+            currentFilePath.begin() + currentFilePath.rfind("/"),
+            currentFilePath.end()
+        );
+
+        const auto&& vertexShader = thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert");
+        const auto&& fragmentShader = thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag");
+        vertexShader.compile();
+        fragmentShader.compile();
+
+        // this->program.attach(vertexShader, fragmentShader);
+        // this->program.link(vertexShader, fragmentShader);
+        const auto && program = thuw::Shader::Program();
+        program.attach(vertexShader, fragmentShader);
+        program.link(vertexShader, fragmentShader);
+
+        const auto&& vbo = thuw::Vertex::VBO(
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f,  0.5f, 0.0f
+        );
+        const auto&& vao = thuw::VAO();
+        vao.bind();
+        vao.copyInBuffer(vbo);
+        vao.setAttribute();
+
+        // this->vao.bind();
+        // this->vao.copyInBuffer(vbo);
+        // this->vao.setAttribute();
     }
 
     void update() {
+        glClearColor(0.5,0.5, 0.2, 1.);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         this->key.update();
+
+        // this->program.use();
+        // this->vao.bind();
+        glUseProgram(1);
+        glBindVertexArray(1);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 };

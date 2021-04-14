@@ -21,11 +21,11 @@ public:
     }
 
     template<typename ...Scene>
-    void emplace(const Scene ...scene) {
+    void emplace(const Scene& ...scene) {
         (this->sceneMap.emplace(Scene::Name, std::make_shared<Scene>(scene)), ...);
     }
 
-    [[nodiscard]] auto operator[](const std::string name) {
+    [[nodiscard]] auto operator[](const std::string& name) {
         assert(this->sceneMap.contains(name));
 
         return this->sceneMap[name];
@@ -37,7 +37,7 @@ public:
         return this->currentScene;
     }
 
-    auto choose(const std::string name) {
+    auto choose(const std::string& name) {
         assert(this->sceneMap.contains(name));
 
         this->currentScene = this->sceneMap[name];

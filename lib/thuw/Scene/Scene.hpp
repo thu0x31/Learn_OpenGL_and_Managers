@@ -16,8 +16,6 @@ namespace thuw::Scene {
 
 class thuw::Scene::SceneInterface {
 public:
-    virtual void setup() = 0; // TODO:
+    virtual void setup() = 0;
     virtual void update() = 0;
-    virtual void preTrandition() {};
-    virtual void transitioned() {};
 };

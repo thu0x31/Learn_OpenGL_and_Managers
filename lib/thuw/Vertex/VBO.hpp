@@ -1,31 +1,30 @@
 #pragma once
 
 #include "glad/glad.h"
+#include <algorithm>
+#include <array>
 #include <initializer_list>
 #include <iostream>
+#include <vector>
 
+// TODO: Buffer namespace?
 namespace thuw::Vertex {
     class VBO;
 }
 
 class thuw::Vertex::VBO {
-private:
-    static inline int globalID = 1;
-    GLuint id;
-
 public:
-    VBO() = default;
+    GLuint id; // TODO: 複数のバッファに対応させるかどうか
+    const std::vector<GLfloat> vercities;
 
-    VBO(const std::initializer_list<float>& vercities, const int usage = VBO::STREAM_DRAW) {
-        glGenBuffers(globalID, &id);
-        glBindBuffer(GL_ARRAY_BUFFER, id);
-
-        globalID++;
+    // TODO: vec2,vec3,vec4
+    // TODO: 複数のバッファに対応させるかどうか
+    template<class ...Vertex>
+    VBO(Vertex ...vertex) : vercities({vertex...}) {
+        glGenBuffers(1, &id);
+        
+        #ifndef NDEBUG
+            std::cout << "create VBO : id:" << this->id << std::endl;
+        #endif
     }
-
-    enum : int {
-        STREAM_DRAW = GL_STREAM_DRAW,
-        STATIC_DRAW = GL_STATIC_DRAW,
-        DYNAMIC_DRAW = GL_DYNAMIC_DRAW,
-    };
 };

@@ -37,6 +37,7 @@ public:
         }
     }
 
+    // TODO: 間違った
     enum : int {
         UNKNOWN            = -1,
         SPACE              = 32,
