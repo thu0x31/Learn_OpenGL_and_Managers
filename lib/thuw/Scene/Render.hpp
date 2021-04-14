@@ -33,8 +33,8 @@ public:
 
             this->sceneList->current()->update();
 
-            glfwPollEvents();
             this->window.swapBuffers();
+            glfwPollEvents();
         }
         this->window.close();
     }

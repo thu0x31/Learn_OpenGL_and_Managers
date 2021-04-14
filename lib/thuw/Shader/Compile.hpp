@@ -10,7 +10,7 @@ namespace thuw::Shader {
     template<class Shader>
     void compile(const Shader& shader) {
         const char* code = shader->getCode();
-        glShaderSource(shader->getId(), 1, &code, nullptr);
+        glShaderSource(shader->getId(), 1, &code, NULL);
         glCompileShader(shader->getId());
 
         #ifndef NDEBUG
@@ -23,7 +23,10 @@ namespace thuw::Shader {
                 char infoLog[512];
                 glGetShaderInfoLog(shader->getId(), 512, NULL, infoLog);
                 std::cout << "ERROR::SHADER:: " << infoLog << std::endl;
+                return;
             }
+
+            std::cout << "Shader Compile is Success" << std::endl;
         #endif
     }
 }

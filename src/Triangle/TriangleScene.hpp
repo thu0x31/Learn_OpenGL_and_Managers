@@ -23,8 +23,8 @@ public:
     static constexpr auto Name = "Triangle";
     thuw::Scene::Transitioner transition;
     thuw::Key key;
-    // thuw::Shader::Program program;
-    // thuw::VAO vao;
+    thuw::Shader::Program program;
+    thuw::VAO vao;
 
     TriangleScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
      : transition(transition), key(key)
@@ -54,9 +54,7 @@ public:
         vertexShader.compile();
         fragmentShader.compile();
 
-        // this->program.attach(vertexShader, fragmentShader);
-        // this->program.link(vertexShader, fragmentShader);
-        const auto && program = thuw::Shader::Program();
+        // const auto && program = thuw::Shader::Program();
         program.attach(vertexShader, fragmentShader);
         program.link(vertexShader, fragmentShader);
 
@@ -65,26 +63,22 @@ public:
             0.5f, -0.5f, 0.0f,
             0.0f,  0.5f, 0.0f
         );
-        const auto&& vao = thuw::VAO();
+        // const auto&& vao = thuw::VAO();
         vao.bind();
         vao.copyInBuffer(vbo);
         vao.setAttribute();
 
-        // this->vao.bind();
-        // this->vao.copyInBuffer(vbo);
-        // this->vao.setAttribute();
+        vao.unbind();
     }
 
     void update() {
-        glClearColor(0.5,0.5, 0.2, 1.);
+        glClearColor(0.1,0.1, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
 
         this->key.update();
 
-        // this->program.use();
-        // this->vao.bind();
-        glUseProgram(1);
-        glBindVertexArray(1);
+        this->program.use();
+        this->vao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 };

@@ -11,7 +11,6 @@ namespace thuw {
 
 struct thuw::VAO {
 private:
-    static inline int globalId = 1;
     GLuint id;
 
 public:
@@ -27,9 +26,22 @@ public:
         glBindVertexArray(this->id);
     }
 
+    void unbind() {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
     void copyInBuffer(const thuw::Vertex::VBO& vbo) const {
         glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
-        glBufferData(GL_ARRAY_BUFFER, vbo.vercities.size(), vbo.vercities.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vbo.vercities), vbo.vercities.data(), GL_STATIC_DRAW);
+
+        #ifndef NDEBUG
+            std::cout << "Copy in Buffer: VBO id:" << vbo.id
+             << " size:" << sizeof(vbo.vercities) << std::endl;
+            for(const auto& v : vbo.vercities) {
+                std::cout << v << std::endl;
+            }
+        #endif
     }
 
     void setAttribute() const {

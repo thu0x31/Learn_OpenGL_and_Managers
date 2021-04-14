@@ -9,7 +9,6 @@ namespace thuw::Shader {
     struct Program;
 }
 
-// TODO: ProgramはProgramなのでShaderではないと思う
 struct thuw::Shader::Program {
 private:
     const GLuint id;
@@ -24,6 +23,12 @@ public:
     template<class ...ShaderList>
     void attach(const ShaderList& ...shader) const {
         (glAttachShader(this->id, shader.getId()), ...);
+
+        #ifndef NDEBUG
+            ([&]{
+                std::cout << "Attach: Program id:" << this->id << " Shader id:" << shader.getId() << std::endl;
+            }(), ...);
+        #endif
     }
 
     template<class ...ShaderList>
@@ -35,11 +40,11 @@ public:
             glGetProgramiv(this->id, GL_LINK_STATUS, &success);
             if(!success) {
                 char infoLog[512];
-                glGetProgramInfoLog(this->id, 512, nullptr, infoLog);
+                glGetProgramInfoLog(this->id, 512, NULL, infoLog);
                 std::cout << "ERROR:Shader:Program:LINK: " << infoLog << std::endl;
             }
         #endif
-        
+
         (glDeleteShader(shader.getId()), ...);
     }
 
