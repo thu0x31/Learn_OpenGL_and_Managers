@@ -11,10 +11,11 @@
 
 int main() {
     const auto&& window = thuw::Window(800,600, "test");
-    auto&& key = thuw::Key(window);
+    const auto&& key = thuw::Key(window);
 
-    auto&& sceneList = std::make_shared<thuw::Scene::List>();
-    auto&& transitioner = thuw::Scene::Transitioner(sceneList);//TODO: 
+    auto&& sceneList = std::make_shared<thuw::Scene::List>(); // TODO:
+    const auto&& transitioner = thuw::Scene::Transitioner(sceneList);//TODO: 
+    // TODO:
     sceneList->emplace(
         FirstScene(transitioner, key),
         TriangleScene(transitioner, key)

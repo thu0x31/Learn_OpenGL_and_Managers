@@ -17,15 +17,16 @@ namespace thuw::Shader {
 }
 
 class thuw::Shader::Vertex {
-private:
+public:
     const GLuint id;
     std::string code;
 
-public:
     Vertex(const std::string& shaderPath) : id(glCreateShader(GL_VERTEX_SHADER)) {
         this->path(shaderPath);
+        this->compile();
     }
 
+private:
     void path(const std::string& shaderPath) {
         #ifndef NDEBUG
             std::cout << "VertexShader: id:" << this->id << " path:" << shaderPath << std::endl;
@@ -38,14 +39,6 @@ public:
             std::istreambuf_iterator<char>(fileStream),
             std::istreambuf_iterator<char>()
         );
-    }
-
-    auto getCode() const {
-        return this->code.c_str();
-    }
-
-    auto getId() const {
-        return this->id;
     }
 
     void compile() const {

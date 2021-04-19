@@ -22,11 +22,11 @@ public:
 
     template<class ...ShaderList>
     void attach(const ShaderList& ...shader) const {
-        (glAttachShader(this->id, shader.getId()), ...);
+        (glAttachShader(this->id, shader.id), ...);
 
         #ifndef NDEBUG
             ([&]{
-                std::cout << "Attach: Program id:" << this->id << " Shader id:" << shader.getId() << std::endl;
+                std::cout << "Attach: Program id:" << this->id << " Shader id:" << shader.id << std::endl;
             }(), ...);
         #endif
     }
@@ -45,7 +45,7 @@ public:
             }
         #endif
 
-        (glDeleteShader(shader.getId()), ...);
+        (glDeleteShader(shader.id), ...);
     }
 
     void use() const {
