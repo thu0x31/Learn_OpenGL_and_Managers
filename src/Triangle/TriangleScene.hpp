@@ -11,6 +11,7 @@
 #include "thuw/Buffer/EBO.hpp"
 #include "thuw/VAO.hpp"
 #include "thuw/Vec.hpp"
+#include "thuw/Vertices.hpp"
 #include <array>
 #include <string>
 #include <vector>
@@ -35,6 +36,13 @@ public:
             this->transition("First");
         });
 
+        this->key.pressed<thuw::Key::A>([&]{
+            this->program.use();
+            this->vao.bind();
+            // glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        });
+
         // TODO: 
         std::string currentFilePath(__FILE__);
         currentFilePath.erase(
@@ -48,22 +56,25 @@ public:
         program.attach(vertexShader, fragmentShader);
         program.link(vertexShader, fragmentShader);
 
-        const auto&& vbo = thuw::Buffer::VBO(
-            thuw::Vec<3>{0.5f, 0.5f, 0.0f},
-            thuw::Vec<3>{0.5f, -0.5f, 0.0f},
-            thuw::Vec<3>{-0.5f, -0.5f, 0.0f},
-            thuw::Vec<3>{-0.5f,  0.5f, 0.0f}
-        );
+        constexpr auto vertices = thuw::Vertices{
+            thuw::Vec{0.5f, 0.5f, 0.0f},
+            thuw::Vec{0.5f, -0.5f, 0.0f},
+            thuw::Vec{-0.5f, -0.5f, 0.0f},
+            thuw::Vec{-0.5f,  0.5f, 0.0f}
+        };
 
-        const auto&& ebo = thuw::Buffer::EBO(
+        const auto&& vbo = thuw::Buffer::VBO(vertices);
+        const auto&& ebo = thuw::Buffer::EBO{
             0, 1, 3,
             1, 2, 3
-        );
+        };
 
         vao.bind();
         vao.copyInBuffer(vbo);
         vao.copyInBuffer(ebo);
-        vao.setAttribute();
+
+        constexpr int location = 0;
+        vao.setAttribute(location);
 
         // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         // vao.unbind();
@@ -83,10 +94,5 @@ public:
         glClear(GL_COLOR_BUFFER_BIT);
 
         this->key.update();
-
-        this->program.use();
-        this->vao.bind();
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 };

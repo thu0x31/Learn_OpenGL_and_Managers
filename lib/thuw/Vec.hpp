@@ -7,17 +7,23 @@
 #include <tuple>
 #include <vector>
 
+template<class VecClass>
+concept VecConcept = requires {
+    VecClass::vec;
+    VecClass::dimension;
+};
+
 //TODO: namespace
 namespace thuw {
-    template<std::size_t Dimension>
+    template<typename ...Num>
     class Vec;
 }
 
-template<std::size_t Dimension>
+template<typename ...Num>
 class thuw::Vec {
 public:
-    const std::array<GLfloat, Dimension> vec;
-    static constexpr std::size_t dimension = Dimension;
+    static constexpr std::size_t dimension = sizeof...(Num);
+    const std::array<GLfloat, dimension> vec;
 
     enum : const int {
         X = 0,
@@ -26,9 +32,8 @@ public:
         W = 3
     };
 
-    template<typename ...T>
-    constexpr Vec(const T& ...n) : vec({n...}) {
-        static_assert(sizeof...(n) == Dimension);
+    constexpr Vec(const Num& ...n) : vec({n...}) {
+        // static_assert(sizeof...(n) == Dimension);
     }
 
     constexpr GLfloat x() const {
@@ -40,22 +45,21 @@ public:
     }
 
     constexpr GLfloat z() const {
-        static_assert(Dimension > Z);
+        static_assert(dimension > Z);
         return this->vec[Z];
     }
 
     constexpr GLfloat w() const {
-        static_assert(Dimension > W);
+        static_assert(dimension > W);
         return this->vec[W];
     }
     
     template<typename Vector>
-    constexpr Vec<Dimension> operator+(const Vector&& vec) const {
-        GLfloat v[Dimension];
-        for(int i = 0; i < Dimension; i++) {
+    constexpr auto operator+(const Vector&& vec) const {
+        GLfloat v[this->dimension];
+        for(int i = 0; i < this->dimension; i++) {
             v[i] = this->vec[i] + vec.vec[i];
         }
-        return Vec<Dimension>(v);
+        return Vec(v);
     }
-
 };
