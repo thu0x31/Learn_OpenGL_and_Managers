@@ -15,9 +15,14 @@ private:
     GLFWwindow* window;
 
 public:
+    const GLuint width;
+    const GLuint height;
+    const std::string title;
+
     Window(const GLuint width, const GLuint height,
             const std::string& title = "thuthuthu",
             const int majorVersion = 3, const int minorVersion = 3) 
+            : width(width), height(height), title(title)
     {
         glfwInit();
         this->contextVersion(majorVersion, minorVersion);
@@ -27,7 +32,7 @@ public:
         #endif
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        this->window = this->createWindow(width, height, title);
+        this->window = this->createWindow(this->width, this->height, this->title);
         this->setCallbacks();
     }
 

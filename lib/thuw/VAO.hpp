@@ -13,6 +13,7 @@ namespace thuw {
 struct thuw::VAO {
 private:
     GLuint id;
+    GLuint stride;
 
 public:
     VAO() {
@@ -33,13 +34,14 @@ public:
     }
 
     template<VBOConcept VBO>
-    void copyInBuffer(const VBO& vbo, const GLenum usage = GL_STATIC_DRAW) const {
+    void copyInBuffer(const VBO& vbo, const GLenum usage = GL_STATIC_DRAW) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vbo.vercities), vbo.vercities.data(), usage);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vbo.vertices), vbo.vertices.data(), usage);
+        this->stride = vbo.stride;
 
         #ifndef NDEBUG
             std::cout << "Copy in Buffer: VBO id:" << vbo.id
-             << " size:" << sizeof(vbo.vercities) << std::endl;
+             << " size:" << sizeof(vbo.vertices) << std::endl;
         #endif
     }
 
@@ -54,13 +56,8 @@ public:
         #endif
     }
 
-    void setAttribute() const {
-        // TODO: location
-        constexpr int location = 0;
-        // TODO: Stride
-        constexpr int vecDimension = 3;
-        constexpr int stride = vecDimension * sizeof(float);
-        glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+    void setAttribute(const int location) const {
+        glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, this->stride, (void*)0);
         glEnableVertexAttribArray(location);
     }
 };

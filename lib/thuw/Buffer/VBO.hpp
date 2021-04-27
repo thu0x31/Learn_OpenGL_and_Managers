@@ -10,25 +10,26 @@
 #include <utility>
 #include <vector>
 
-template<class T>
+template<class VBOClass>
 concept VBOConcept = requires {
-    T::vercities;
-    T::id;
+    VBOClass::vertices;
+    VBOClass::id;
+    VBOClass::stride;
 };
 
 namespace thuw::Buffer {
-    template<class First, class ...V>
+    template<class Vertices>
     class VBO;
 }
 
-template<class First, class ...V>
+template<class Vertices>
 class thuw::Buffer::VBO {
 public:
     GLuint id;
-    const std::array<const First, sizeof...(V) + 1> vercities;
+    const Vertices vertices;
+    const std::size_t stride;// TODO:
 
-    VBO(const First&& fvec, const V&& ... vec) : vercities({fvec, vec...}) {
-        (assert(First::dimension == vec.dimension), ...);
+    VBO(Vertices vertices) : vertices(vertices), stride(vertices.dimension * sizeof(float)) {
         glGenBuffers(1, &id);
         
         #ifndef NDEBUG

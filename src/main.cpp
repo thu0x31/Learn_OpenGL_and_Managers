@@ -6,7 +6,9 @@
 #include "thuw/Window/Window.hpp"
 #include "thuw/Scene/Scene.hpp"
 #include "thuw/Scene/Render.hpp"
+#include "testScene/TestScene.hpp"
 #include "First/FirstScene.hpp"
+#include <iostream>
 #include <memory>
 
 int main() {
@@ -15,6 +17,7 @@ int main() {
 
     auto&& sceneList = std::make_shared<thuw::Scene::List>(); // TODO:
     const auto&& transitioner = thuw::Scene::Transitioner(sceneList);//TODO: 
+
     // TODO:
     sceneList->emplace(
         FirstScene(transitioner, key),

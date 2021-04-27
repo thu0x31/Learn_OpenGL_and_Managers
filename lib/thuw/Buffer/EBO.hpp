@@ -14,11 +14,11 @@ concept EBOConcept = requires {
 };
 
 namespace thuw::Buffer {
-    template<std::size_t Size = 3, typename ...Index>
+    template<typename ...Index>
     struct EBO;
 }
 
-template<std::size_t Size, typename ...Index>
+template<typename ...Index>
 struct thuw::Buffer::EBO {
     GLuint id;
     const std::array<int, sizeof...(Index)> indices;

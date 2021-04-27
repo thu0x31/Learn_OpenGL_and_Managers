@@ -6,10 +6,12 @@
 #include <ostream>
 
 namespace thuw::Scene{
-    struct Transitioner;
+    class Transitioner;
+    void transition();
 }
 
-struct thuw::Scene::Transitioner {
+// TODO: 関数にする
+class thuw::Scene::Transitioner {
     std::shared_ptr<thuw::Scene::List> sceneList;
 
 public:

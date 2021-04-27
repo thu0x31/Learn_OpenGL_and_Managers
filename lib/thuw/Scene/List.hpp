@@ -11,13 +11,14 @@ namespace thuw::Scene {
     class List;
 }
 
+// TODO: 
 class thuw::Scene::List {
 private:
     std::shared_ptr<SceneInterface> currentScene;
     std::unordered_map<std::string, std::shared_ptr<SceneInterface>> sceneMap;
 
 public:
-    // TODO: 
+    // TODO:
     List() {
     }
 
