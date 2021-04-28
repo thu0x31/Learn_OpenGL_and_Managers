@@ -12,7 +12,7 @@ namespace thuw::Scene{
 
 // TODO: 関数にする
 class thuw::Scene::Transitioner {
-    std::shared_ptr<thuw::Scene::List> sceneList;
+    const std::shared_ptr<thuw::Scene::List> sceneList;
 
 public:
     Transitioner(const std::shared_ptr<thuw::Scene::List>& sceneList) : sceneList(sceneList) {}
