@@ -14,8 +14,8 @@ namespace thuw::Scene {
 
 template<SceneConcept ...SceneClass>
 struct thuw::Scene::List {
-    static inline std::shared_ptr<SceneInterface> currentScene; // TODO: 分離できるはず
-    static const inline std::unordered_map<std::string, std::shared_ptr<thuw::Scene::SceneInterface>>
+    static inline std::shared_ptr<Scene::Interface> currentScene; // TODO: 分離できるはず
+    static const inline std::unordered_map<std::string, std::shared_ptr<thuw::Scene::Interface>>
         sceneMap = {
                 {SceneClass::Name , std::make_shared<SceneClass>()}... 
             };

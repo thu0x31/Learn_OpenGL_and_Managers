@@ -21,7 +21,7 @@
     #include <ostream>
 #endif
 
-class TriangleScene final : public thuw::Scene::SceneInterface {
+class TriangleScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "Triangle";
     // thuw::Scene::Transitioner transition;

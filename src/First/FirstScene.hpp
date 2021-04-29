@@ -11,7 +11,7 @@
     #include <ostream>
 #endif
 
-class FirstScene final : public thuw::Scene::SceneInterface {
+class FirstScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
     // thuw::Scene::Transitioner transition;
