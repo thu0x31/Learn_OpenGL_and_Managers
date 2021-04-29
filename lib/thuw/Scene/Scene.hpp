@@ -17,10 +17,10 @@ concept SceneConcept = requires(SceneClass scene){
 };
 
 namespace thuw::Scene {    
-    class SceneInterface;
+    class Interface;
 }
 
-class thuw::Scene::SceneInterface {
+class thuw::Scene::Interface {
 public:
     virtual void setup() = 0;
     virtual void update() = 0;

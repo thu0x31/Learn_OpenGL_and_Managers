@@ -2,7 +2,7 @@
 
 #include "thuw/Scene/Scene.hpp"
 
-class TestScene final : public thuw::Scene::SceneInterface {
+class TestScene final : public thuw::Scene::Interface {
 public:
     TestScene() {
 
