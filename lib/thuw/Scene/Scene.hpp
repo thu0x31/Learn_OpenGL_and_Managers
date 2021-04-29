@@ -10,6 +10,12 @@
     #include <cassert>
 #endif
 
+template<class SceneClass>
+concept SceneConcept = requires(SceneClass scene){
+    scene.setup();
+    scene.update();
+};
+
 namespace thuw::Scene {    
     class SceneInterface;
 }

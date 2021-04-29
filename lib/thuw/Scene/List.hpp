@@ -8,41 +8,35 @@
 #include <unordered_map>
 
 namespace thuw::Scene {
-    class List;
+    template<SceneConcept ...SceneClass>
+    struct List;
 }
 
-// TODO: 
-class thuw::Scene::List {
-private:
-    std::shared_ptr<SceneInterface> currentScene;
-    std::unordered_map<std::string, std::shared_ptr<SceneInterface>> sceneMap;
-
-public:
-    // TODO:
-    List() {
-    }
-
-    template<typename ...Scene>
-    void emplace(const Scene& ...scene) {
-        (this->sceneMap.emplace(Scene::Name, std::make_shared<Scene>(scene)), ...);
-    }
+template<SceneConcept ...SceneClass>
+struct thuw::Scene::List {
+    static inline std::shared_ptr<SceneInterface> currentScene; // TODO: 分離できるはず
+    static const inline std::unordered_map<std::string, std::shared_ptr<thuw::Scene::SceneInterface>>
+        sceneMap = {
+                {SceneClass::Name , std::make_shared<SceneClass>()}... 
+            };
 
     [[nodiscard]] auto operator[](const std::string& name) {
-        assert(this->sceneMap.contains(name));
+        assert(List::sceneMap.contains(name));
 
-        return this->sceneMap[name];
+        return List::sceneMap.at(name);
     }
 
     [[nodiscard]] auto current() const {
-        assert(this->currentScene != nullptr);
+        assert(List::currentScene != nullptr);
 
-        return this->currentScene;
+        return List::currentScene;
     }
 
     auto choose(const std::string& name) {
-        assert(this->sceneMap.contains(name));
+        assert(List::sceneMap.contains(name));
 
-        this->currentScene = this->sceneMap[name];
-        return this->current();
+        List::currentScene = List::sceneMap.at(name);
+        
+        return List::currentScene;
     }
 };

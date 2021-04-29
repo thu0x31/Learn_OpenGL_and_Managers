@@ -10,18 +10,18 @@ namespace thuw::Scene{
     void transition();
 }
 
-// TODO: 関数にする
-class thuw::Scene::Transitioner {
-    const std::shared_ptr<thuw::Scene::List> sceneList;
+// // TODO: 関数にする
+// class thuw::Scene::Transitioner {
+//     const std::shared_ptr<thuw::Scene::List> sceneList;
 
-public:
-    Transitioner(const std::shared_ptr<thuw::Scene::List>& sceneList) : sceneList(sceneList) {}
+// public:
+//     Transitioner(const std::shared_ptr<thuw::Scene::List>& sceneList) : sceneList(sceneList) {}
 
-    void operator()(const std::string& name) {
-        this->sceneList->choose(name)->setup();
-    }
+//     void operator()(const std::string& name) {
+//         this->sceneList->choose(name)->setup();
+//     }
 
-    void transition(const std::string& name) {
-        this->sceneList->choose(name)->setup();
-    }
-};
+//     void transition(const std::string& name) {
+//         this->sceneList->choose(name)->setup();
+//     }
+// };

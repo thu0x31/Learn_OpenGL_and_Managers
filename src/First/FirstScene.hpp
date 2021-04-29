@@ -14,15 +14,16 @@
 class FirstScene final : public thuw::Scene::SceneInterface {
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
-    thuw::Scene::Transitioner transition;
-    thuw::Key key;
+    // thuw::Scene::Transitioner transition;
+    // thuw::Key key;
 
-    FirstScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
-     : transition(transition), key(key)
+    // FirstScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
+    //  : transition(transition), key(key)
+    FirstScene()
     {
-        this->key.pressed<thuw::Key::E>([&]{
-            this->transition("Triangle");
-        });
+        // this->key.pressed<thuw::Key::E>([&]{
+        //     this->transition("Triangle");
+        // });
     }
     
     void setup() {
@@ -35,6 +36,6 @@ public:
     }
 
     void update() {
-        this->key.update();
+        // this->key.update();
     }
 };

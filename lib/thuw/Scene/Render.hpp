@@ -12,26 +12,28 @@
 #endif
 
 namespace thuw::Scene {
+    template<class SceneList>
     class Render;
 }
 
+template<class SceneList>
 class thuw::Scene::Render {
 private:
     //TODO: emscripten
     const thuw::Window window;
-    const std::shared_ptr<thuw::Scene::List> sceneList;
+    SceneList sceneList;
 public:
-    Render(const Window& targetWindow, std::shared_ptr<thuw::Scene::List>& sceneList) 
+    Render(const Window& targetWindow, SceneList& sceneList) 
     : window(targetWindow), sceneList(sceneList) {}
 
     // TODO: emscripten
     template<class Scene>
     void loop() {
-        this->sceneList->choose(Scene::Name)->setup();
+        this->sceneList.choose(Scene::Name)->setup();
 
         while (this->window.isClose()) {
 
-            this->sceneList->current()->update();
+            this->sceneList.current()->update();
 
             this->window.swapBuffers();
             glfwPollEvents();
