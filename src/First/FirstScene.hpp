@@ -13,8 +13,7 @@
     #include <ostream>
 #endif
 
-class FirstScene final : public thuw::Scene::Interface
-{
+class FirstScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
     // thuw::Key key;
