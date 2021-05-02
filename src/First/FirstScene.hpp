@@ -5,20 +5,20 @@
 #include "thuw/Scene/Scene.hpp"
 #include "thuw/Keyboard/Key.hpp"
 #include "thuw/Scene/Transitioner.hpp"
+#include <functional>
+#
 
 #ifndef NDEBUG
     #include <iostream>
     #include <ostream>
 #endif
 
-class FirstScene final : public thuw::Scene::Interface {
+class FirstScene final : public thuw::Scene::Interface
+{
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
-    // thuw::Scene::Transitioner transition;
     // thuw::Key key;
 
-    // FirstScene(const thuw::Scene::Transitioner& transition , const thuw::Key& key)
-    //  : transition(transition), key(key)
     FirstScene()
     {
         // this->key.pressed<thuw::Key::E>([&]{
@@ -36,6 +36,6 @@ public:
     }
 
     void update() {
-        // this->key.update();
+        thuw::Scene::transition("Triangle");
     }
 };

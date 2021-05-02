@@ -32,7 +32,7 @@ public:
         this->sceneList.choose(Scene::Name)->setup();
 
         while (this->window.isClose()) {
-
+            // this->sceneList.current()->key->update(this->window.glfwWwindow());
             this->sceneList.current()->update();
 
             this->window.swapBuffers();
@@ -40,4 +40,12 @@ public:
         }
         this->window.close();
     }
+
+    // template<KeyboardConcept Scene>
+    // void updateKeyboard(const Scene& scene) {
+    //     scene.key->update();
+    // }
+
+    // template<class Scene>
+    // void updateKeyboard(Scene& scene) {}
 };

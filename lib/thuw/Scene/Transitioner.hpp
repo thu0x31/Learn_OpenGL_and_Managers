@@ -1,27 +1,28 @@
 #pragma once
 #include "Scene.hpp"
-#include "thuw/Scene/List.hpp"
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <ostream>
 
-namespace thuw::Scene{
+namespace thuw::Scene {
     class Transitioner;
-    void transition();
+    void transition(const std::string& name);
 }
 
-// // TODO: 関数にする
-// class thuw::Scene::Transitioner {
-//     const std::shared_ptr<thuw::Scene::List> sceneList;
+// TODO: 
+class thuw::Scene::Transitioner {
+public:
+    using TransitionFunc = std::function<std::shared_ptr<Scene::Interface>(const std::string&)>;
+    static inline TransitionFunc transition = nullptr;
 
-// public:
-//     Transitioner(const std::shared_ptr<thuw::Scene::List>& sceneList) : sceneList(sceneList) {}
+    Transitioner(TransitionFunc transition) {
+        Transitioner::transition = transition;
+    }
+};
 
-//     void operator()(const std::string& name) {
-//         this->sceneList->choose(name)->setup();
-//     }
+void thuw::Scene::transition(const std::string& name) {
+    assert(thuw::Scene::Transitioner::transition != nullptr);
 
-//     void transition(const std::string& name) {
-//         this->sceneList->choose(name)->setup();
-//     }
-// };
+    thuw::Scene::Transitioner::transition(name)->setup();
+}

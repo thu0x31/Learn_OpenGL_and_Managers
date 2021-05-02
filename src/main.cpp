@@ -12,15 +12,14 @@
 #include <iostream>
 #include <memory>
 
+
 int main() {
     const auto&& window = thuw::Window(800,600, "test");
-    // const auto&& key = thuw::Key(window);
 
-    auto&& sceneList = thuw::Scene::List<
+    const auto&& sceneList = thuw::Scene::List<
         FirstScene,
         TriangleScene
     >();
-    // const auto&& transitioner = thuw::Scene::Transitioner(sceneList);//TODO: 
 
     thuw::Scene::Render(window, sceneList).loop<FirstScene>();
 
