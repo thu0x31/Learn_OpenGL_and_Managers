@@ -21,7 +21,7 @@ class thuw::Scene::Render {
 private:
     //TODO: emscripten
     const thuw::Window window;
-    SceneList sceneList;
+    const SceneList sceneList;
 public:
     Render(const Window& targetWindow, SceneList& sceneList) 
     : window(targetWindow), sceneList(sceneList) {}
@@ -29,23 +29,15 @@ public:
     // TODO: emscripten
     template<class Scene>
     void loop() {
-        this->sceneList.choose(Scene::Name)->setup();
+        auto&& scene = this->sceneList[Scene::Name];
+        scene->setup();
 
         while (this->window.isClose()) {
-            // this->sceneList.current()->key->update(this->window.glfwWwindow());
-            this->sceneList.current()->update();
+            scene->update();
 
             this->window.swapBuffers();
             glfwPollEvents();
         }
         this->window.close();
     }
-
-    // template<KeyboardConcept Scene>
-    // void updateKeyboard(const Scene& scene) {
-    //     scene.key->update();
-    // }
-
-    // template<class Scene>
-    // void updateKeyboard(Scene& scene) {}
 };

@@ -25,6 +25,7 @@ class TriangleScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "Triangle";
     // thuw::Key key;
+    // TODO: global
     thuw::Shader::Program program;
     thuw::VAO vao;
 

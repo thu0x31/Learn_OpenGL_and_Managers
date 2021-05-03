@@ -35,6 +35,6 @@ public:
     }
 
     void update() {
-        thuw::Scene::transition("Triangle");
+        // thuw::Scene::transition("Triangle");
     }
 };

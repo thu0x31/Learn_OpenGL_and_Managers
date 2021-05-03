@@ -9,6 +9,7 @@ namespace thuw::Shader {
     struct Program;
 }
 
+// TODO: global
 struct thuw::Shader::Program {
 private:
     const GLuint id;
