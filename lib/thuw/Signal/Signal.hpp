@@ -6,55 +6,77 @@
 #include <initializer_list>
 #include <list>
 #include <memory>
-#include <tuple>
+#include <type_traits>
 
 namespace thuw {
-    template<typename ...Args>
+    template<typename ReturnType, typename ...Args>
     class Signal;
 
-    template<typename ...Args>
+    template<typename ReturnType, typename ...Args>
     class Connection;
-
-    template<typename ...Args>
-    using Slot = std::function<void(Args...)>;
 }
 
-template<typename ...Args>
-class thuw::Signal {
+template<typename ReturnType, typename ...Args>
+class thuw::Signal<ReturnType(Args...)> {
 public:
-    std::list<Slot<Args...>> slotList;
+    using Slot = std::function<ReturnType(Args...)>;
+    std::list<Slot> slotList;
 
     Signal() = default;
     
-    [[nodiscard]] auto connect(const Slot<Args...>&& slot)-> thuw::Connection<Args...> {
+    [[nodiscard]] thuw::Connection<ReturnType(Args...)> connect(const Slot&& slot) {
         auto&& itr = this->slotList.insert(this->slotList.end(), slot);
-        return thuw::Connection<Args...>(this->slotList, itr);
+        return thuw::Connection<ReturnType(Args...)>(this->slotList, itr);
     }
 
-    void operator()(Args& ...args) const {
+    ReturnType operator()(Args& ...args) const
+    requires std::same_as<ReturnType, void>
+    {
         for(auto& slot : this->slotList) {
             slot(std::forward<Args>(args)...);
         }
     }
 
-    void operator()(Args&& ...args) const {
+    ReturnType operator()(Args&& ...args) const 
+    requires std::same_as<ReturnType, void>
+    {
+        for(auto& slot : this->slotList) {
+            slot(std::forward<Args>(args)...);
+        }
+    }
+
+    ReturnType operator()(const Args& ...args) const 
+    requires std::same_as<ReturnType, void>
+    {
+        for(auto& slot : this->slotList) {
+            slot(std::forward<Args>(args)...);
+        }
+    }
+
+    ReturnType operator()(const Args&& ...args) const 
+    requires std::same_as<ReturnType, void>
+    {
         for(auto& slot : this->slotList) {
             slot(std::forward<Args>(args)...);
         }
     }
 };
 
-template<typename ...Args>
-class thuw::Connection {
+template<typename ReturnType, typename ...Args>
+class thuw::Connection<ReturnType(Args...)> {
 private:
-    using Slot = Slot<Args...>;
-    std::list<Slot>* slotList = nullptr;// TODO: shared_ptr
+    using Slot = std::function<ReturnType(Args...)>;
+    std::list<Slot>* slotList = nullptr;
 
     using Iterator = typename std::list<Slot>::iterator;
     Iterator iterator;
 
 public:
     Connection() = default;
+
+    Connection(std::list<Slot>& slots, Iterator iterator)
+     : slotList(&slots)
+     , iterator(iterator){}
 
     Connection(Connection<Args...>& connection)
      : iterator(connection.iterator)
@@ -67,10 +89,6 @@ public:
     {
         std::swap(this->slotList, connection.slotList);
     }
-
-    Connection(std::list<Slot>& slots, Iterator iterator)
-     : slotList(&slots)
-     , iterator(iterator){}
 
     Connection& operator=(Connection<Args...>&& connection) {
         this->iterator = connection.iterator;
@@ -93,12 +111,5 @@ public:
 
 // prototype
 namespace StaticSignal {
-    template<typename ...Args>
-    struct Connect {
-        std::array<std::function<void(Args...)>, sizeof...(Args)> slot;
 
-        constexpr Connect(std::initializer_list<std::function<void(Args...)>> f) : slot(f) {
-
-        }
-    };
 };
