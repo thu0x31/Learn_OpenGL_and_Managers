@@ -7,7 +7,6 @@
 #include <iterator>
 #include <list>
 #include <memory>
-#include <ostream>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -34,82 +33,40 @@ public:
         return thuw::Connection<ReturnType(Args...)>(this->slotList, itr);
     }
 
-    void operator()(Args& ...args) const
+    template<typename ...Args_>
+    void operator()(Args_&& ...args) const
     requires std::same_as<ReturnType, void>
     {
         for(auto& slot : this->slotList) {
-            slot(std::forward<Args>(args)...);
+            slot(std::forward<Args_>(args)...);
         }
     }
 
-    void operator()(Args&& ...args) const 
-    requires std::same_as<ReturnType, void>
+    template<typename ...Args_>
+    std::vector<ReturnType> operator()(Args_&& ...args) const 
     {
-        for(auto& slot : this->slotList) {
-            slot(std::forward<Args>(args)...);
-        }
+        return this->execute<std::vector>(std::forward<Args_>(args)...);
     }
 
-    std::vector<ReturnType> operator()(Args& ...args) const 
+    template<template<class, class Allocator=std::allocator<ReturnType>> class Container>
+    Container<ReturnType> execute(Args&& ... args) const 
     {
-        std::vector<ReturnType> conteinrer(this->slotList.size());
+        Container<ReturnType> container(this->slotList.size());
         
-        auto&& itr = conteinrer.begin();
+        auto&& itr = container.begin();
 
         for (const auto& slot : this->slotList) {
             *itr = slot(std::forward<Args>(args)...);
             ++itr;
         }
         
-        return conteinrer;
-    }
-
-    std::vector<ReturnType> operator()(Args&& ...args) const 
-    {
-        std::vector<ReturnType> conteinrer(this->slotList.size());
-        
-        auto&& itr = conteinrer.begin();
-
-        for (const auto& slot : this->slotList) {
-            *itr = slot(std::forward<Args>(args)...);
-            ++itr;
-        }
-        
-        return conteinrer;
-    }
-
-    template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
-    Conteiner<ReturnType> execute(Args&& ... args) const {
-        Conteiner<ReturnType> conteinrer(this->slotList.size());
-        
-        auto&& itr = conteinrer.begin();
-
-        for (const auto& slot : this->slotList) {
-            *itr = slot(std::forward<Args>(args)...);
-            ++itr;
-        }
-        
-        return conteinrer;
-    }
-
-    template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
-    Conteiner<ReturnType> execute(Args& ... args) const {
-        Conteiner<ReturnType> conteinrer(this->slotList.size());
-        
-        auto&& itr = conteinrer.begin();
-
-        for (const auto& slot : this->slotList) {
-            *itr = slot(std::forward<Args>(args)...);
-            ++itr;
-        }
-        
-        return conteinrer;
+        return container;
     }
 
     //TODO: map
-    // template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
+    // template<template<class, class Allocator=std::allocator<ReturnType>> class Container>
     // requires std::same_as<ReturnType, std::pair<ReturnType.firs>>
-    // Conteiner<ReturnType> execute(Args& ... args) const {
+    // Container<ReturnType> execute(Args& ... args) const {
     //     // std::pair = slot();
     // }
 };
