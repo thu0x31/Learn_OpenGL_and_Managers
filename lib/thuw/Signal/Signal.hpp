@@ -4,9 +4,14 @@
 #include <array>
 #include <functional>
 #include <initializer_list>
+#include <iterator>
 #include <list>
 #include <memory>
+#include <ostream>
 #include <type_traits>
+#include <utility>
+#include <vector>
+#include <concepts>
 
 namespace thuw {
     template<typename ReturnType, typename ...Args>
@@ -29,7 +34,7 @@ public:
         return thuw::Connection<ReturnType(Args...)>(this->slotList, itr);
     }
 
-    ReturnType operator()(Args& ...args) const
+    void operator()(Args& ...args) const
     requires std::same_as<ReturnType, void>
     {
         for(auto& slot : this->slotList) {
@@ -37,7 +42,7 @@ public:
         }
     }
 
-    ReturnType operator()(Args&& ...args) const 
+    void operator()(Args&& ...args) const 
     requires std::same_as<ReturnType, void>
     {
         for(auto& slot : this->slotList) {
@@ -45,20 +50,30 @@ public:
         }
     }
 
-    ReturnType operator()(const Args& ...args) const 
-    requires std::same_as<ReturnType, void>
+    std::vector<ReturnType> operator()(Args& ...args) const 
     {
-        for(auto& slot : this->slotList) {
-            slot(std::forward<Args>(args)...);
-        }
+        std::vector<ReturnType> conteiner;
+        std::transform(this->slotList.begin(),
+                        this->slotList.end(),
+                        std::back_inserter(conteiner),
+                        [&](const auto& slot){
+                            return slot(std::forward<Args>(args)...);
+                        });
+        return std::move(conteiner);
     }
 
-    ReturnType operator()(const Args&& ...args) const 
-    requires std::same_as<ReturnType, void>
+    std::vector<ReturnType> operator()(Args&& ...args) const 
     {
-        for(auto& slot : this->slotList) {
-            slot(std::forward<Args>(args)...);
+        std::vector<ReturnType> conteinrer(this->slotList.size());
+        
+        auto&& itr = conteinrer.begin();
+
+        for (const auto& slot : this->slotList) {
+            *itr = slot(std::forward<Args>(args)...);
+            ++itr;
         }
+        
+        return conteinrer;
     }
 };
 
@@ -78,19 +93,19 @@ public:
      : slotList(&slots)
      , iterator(iterator){}
 
-    Connection(Connection<Args...>& connection)
+    Connection(Connection<ReturnType(Args...)>& connection)
      : iterator(connection.iterator)
     {
         std::swap(this->slotList, connection.slotList);
     }
 
-    Connection(Connection<Args...>&& connection)
+    Connection(Connection<ReturnType(Args...)>&& connection)
      : iterator(connection.iterator)
     {
         std::swap(this->slotList, connection.slotList);
     }
 
-    Connection& operator=(Connection<Args...>&& connection) {
+    auto& operator=(Connection<ReturnType(Args...)>&& connection) {
         this->iterator = connection.iterator;
         std::swap(this->slotList, connection.slotList);
 
@@ -98,6 +113,7 @@ public:
     }
 
     ~Connection() {
+        //死ぬ
         this->disconnect();
     }
 

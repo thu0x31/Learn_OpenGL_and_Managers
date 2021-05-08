@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Triangle/TriangleScene.hpp"
@@ -15,12 +16,14 @@
 int main() {
     const auto&& window = thuw::Window(800,600, "test");
 
-    const auto&& sceneList = thuw::Scene::List(
-        FirstScene(),
-        TriangleScene()
-    );
+    const auto&& sceneList = thuw::Scene::List<
+        FirstScene,
+        TriangleScene,
+        TestScene
+    >();
 
-    thuw::Scene::Render(window, sceneList).loop<FirstScene>();
+    thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<TestScene>();
+    // thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<TriangleScene>();
 
     return 0;
 }
