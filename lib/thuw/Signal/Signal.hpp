@@ -99,7 +99,8 @@ public:
         std::swap(this->slotList, connection.slotList);
     }
 
-    auto& operator=(Connection<ReturnType(Args...)>&& connection) {
+    template<typename C>
+    auto& operator=(C&& connection) {
         this->iterator = connection.iterator;
         std::swap(this->slotList, connection.slotList);
 
