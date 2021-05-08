@@ -52,14 +52,16 @@ public:
 
     std::vector<ReturnType> operator()(Args& ...args) const 
     {
-        std::vector<ReturnType> conteiner;
-        std::transform(this->slotList.begin(),
-                        this->slotList.end(),
-                        std::back_inserter(conteiner),
-                        [&](const auto& slot){
-                            return slot(std::forward<Args>(args)...);
-                        });
-        return std::move(conteiner);
+        std::vector<ReturnType> conteinrer(this->slotList.size());
+        
+        auto&& itr = conteinrer.begin();
+
+        for (const auto& slot : this->slotList) {
+            *itr = slot(std::forward<Args>(args)...);
+            ++itr;
+        }
+        
+        return conteinrer;
     }
 
     std::vector<ReturnType> operator()(Args&& ...args) const 
@@ -75,6 +77,36 @@ public:
         
         return conteinrer;
     }
+
+    template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
+    Conteiner<ReturnType> execute(Args&& ... args) const {
+        Conteiner<ReturnType> conteinrer(this->slotList.size());
+        
+        auto&& itr = conteinrer.begin();
+
+        for (const auto& slot : this->slotList) {
+            *itr = slot(std::forward<Args>(args)...);
+            ++itr;
+        }
+        
+        return conteinrer;
+    }
+
+    template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
+    Conteiner<ReturnType> execute(Args& ... args) const {
+        Conteiner<ReturnType> conteinrer(this->slotList.size());
+        
+        auto&& itr = conteinrer.begin();
+
+        for (const auto& slot : this->slotList) {
+            *itr = slot(std::forward<Args>(args)...);
+            ++itr;
+        }
+        
+        return conteinrer;
+    }
+
+    //TODO: map
 };
 
 template<typename ReturnType, typename ...Args>
@@ -113,7 +145,6 @@ public:
     }
 
     ~Connection() {
-        //死ぬ
         this->disconnect();
     }
 
