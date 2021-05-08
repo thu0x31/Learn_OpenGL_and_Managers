@@ -2,7 +2,6 @@
 
 #include "glad/glad.h"
 #include <array>
-#include <bits/c++config.h>
 #include <initializer_list>
 #include <iostream>
 #include <vector>

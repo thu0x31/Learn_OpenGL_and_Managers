@@ -4,8 +4,6 @@
 #include "thuw/Vec.hpp"
 #include <algorithm>
 #include <array>
-#include <bits/c++config.h>
-#include <initializer_list>
 #include <iostream>
 #include <utility>
 #include <vector>

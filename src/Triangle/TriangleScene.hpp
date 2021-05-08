@@ -9,6 +9,7 @@
 #include "thuw/Shader/Program.hpp"
 #include "thuw/Buffer/VBO.hpp"
 #include "thuw/Buffer/EBO.hpp"
+#include "thuw/Signal/Signal.hpp"
 #include "thuw/VAO.hpp"
 #include "thuw/Vec.hpp"
 #include "thuw/Vertices.hpp"
@@ -24,16 +25,16 @@
 class TriangleScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "Triangle";
-    // thuw::Key key;
+    thuw::Keyboard<TriangleScene> key;
     // TODO: global
     thuw::Shader::Program program;
     thuw::VAO vao;
 
     TriangleScene()
     {
-        // this->key.pressed<thuw::Key::W>([&]{
-        //     this->transition("First");
-        // });
+        this->key.pressed<thuw::Key::W>([]{
+
+        });
 
         // this->key.pressed<thuw::Key::A>([&]{
         //     this->program.use();
@@ -75,7 +76,7 @@ public:
         constexpr int location = 0;
         vao.setAttribute(location);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         vao.unbind();
     }
 

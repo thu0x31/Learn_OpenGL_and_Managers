@@ -49,6 +49,8 @@ package Keyboard {
     
     class Key {
         keyName
+
+        ' signal slot
         release(actionName, [](){})
         press(actionName, [](){})
         repeat(actionName, [](){})

@@ -2,39 +2,36 @@
 #include "thuw/Window/Window.hpp"
 #include <GLFW/glfw3.h>
 #include <functional>
+#include <initializer_list>
 #include <utility>
 #include <vector>
 
 namespace thuw {
-    class Key;
+    template<class Scene>
+    class Keyboard;
 }
 
 // TODO:
-class thuw::Key {
-private:
-    // TODO: 
-    std::vector<std::pair<const int, const std::function<void()>>> pressedFunctions;
-
+template<class Scene>
+class thuw::Keyboard {
 public:
-    Key() {};
+    Keyboard() {};
 
-    template<int Key>
-    void pressed(const std::function<void()>& callback) {
-        static_assert(Key >= UNKNOWN, "Unknown key");
-        
-        this->pressedFunctions.push_back(std::make_pair(Key, callback));
+    template<const int Key>
+    void pressed(const std::function<void(void)>&& callback) {
+        // const auto press = [&callback]{
+        //     // if ... key  == getkey()
+
+        //     callback();
+        // };
+
+        // connect
     }
+    
+};
 
-    // TODO: event
-    void update(GLFWwindow* glfwWindow) {
-        for(const auto& keyFuncPair : this->pressedFunctions) {
-            if(glfwGetKey(glfwWindow, keyFuncPair.first) == GLFW_PRESS) {
-                keyFuncPair.second();
-            }
-        }
-    }
-
-    enum : const int {
+namespace thuw {
+    enum Key : const int {
         UNKNOWN = GLFW_KEY_UNKNOWN,
         SPACE = GLFW_KEY_SPACE,
         APOSTROPHE = GLFW_KEY_APOSTROPHE,
@@ -159,4 +156,4 @@ public:
         MENU = GLFW_KEY_MENU,
         LAST   = GLFW_KEY_LAST
     };
-};
+}

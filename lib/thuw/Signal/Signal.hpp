@@ -107,6 +107,11 @@ public:
     }
 
     //TODO: map
+    // template<template<class, class Allocator=std::allocator<ReturnType>> class Conteiner>
+    // requires std::same_as<ReturnType, std::pair<ReturnType.firs>>
+    // Conteiner<ReturnType> execute(Args& ... args) const {
+    //     // std::pair = slot();
+    // }
 };
 
 template<typename ReturnType, typename ...Args>
@@ -157,6 +162,7 @@ public:
 };
 
 // prototype
+// staticSignal.connect([]()->constexpr{});
 namespace StaticSignal {
 
 };

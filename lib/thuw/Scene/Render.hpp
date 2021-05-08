@@ -23,8 +23,8 @@ private:
     const thuw::Window window;
     const SceneList sceneList;
 public:
-    Render(const Window& targetWindow, SceneList& sceneList) 
-    : window(targetWindow), sceneList(sceneList) {}
+    Render(const Window&& targetWindow, const SceneList&& sceneList) 
+    : window(targetWindow), sceneList(sceneList) {} //TODO: move constructor必要かも
 
     // TODO: emscripten
     template<class Scene>
@@ -33,6 +33,10 @@ public:
         scene->setup();
 
         while (this->window.isClose()) {
+            //      key signal()
+
+            
+
             scene->update();
 
             this->window.swapBuffers();

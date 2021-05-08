@@ -3,7 +3,6 @@
 #include "glad/glad.h"
 #include "thuw/Vec.hpp"
 #include <array>
-#include <bits/c++config.h>
 #include <initializer_list>
 #include <iterator>
 #include <type_traits>

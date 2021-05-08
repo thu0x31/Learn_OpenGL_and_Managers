@@ -6,7 +6,7 @@
 #include "thuw/Keyboard/Key.hpp"
 #include "thuw/Scene/Transitioner.hpp"
 #include <functional>
-#
+#include "thuw/Signal/Signal.hpp"
 
 #ifndef NDEBUG
     #include <iostream>
