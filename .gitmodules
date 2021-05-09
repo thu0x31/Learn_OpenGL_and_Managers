@@ -1,0 +1,3 @@
+[submodule "lib/thuw/Signal/SignalSlot"]
+	path = lib/thuw/Signal
+	url = git@github.com:thu0x31/SignalSlot.git
