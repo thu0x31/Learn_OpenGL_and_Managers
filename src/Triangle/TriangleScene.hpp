@@ -25,14 +25,14 @@
 class TriangleScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "Triangle";
-    thuw::Keyboard<TriangleScene> key;
+    thuw::Keyboard keyboard;
     // TODO: global
     thuw::Shader::Program program;
     thuw::VAO vao;
 
     TriangleScene()
     {
-        this->key.pressed<thuw::Key::W>([]{
+        this->keyboard.pressed<thuw::Key::W>([]{
 
         });
 

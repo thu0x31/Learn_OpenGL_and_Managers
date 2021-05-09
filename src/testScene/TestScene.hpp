@@ -25,6 +25,9 @@ public:
     thuw::Signal<int(char)> testSignalNN;
     thuw::Connection<int(char)> testConnection5;
 
+    thuw::Signal<int(char, int, int, int)> testSignal6;
+    thuw::Connection<int(char)> testConnection6;
+
     TestScene() {
         this->testConnection = this->testSignal.connect([](char a){
             return 1;
@@ -59,6 +62,12 @@ public:
         for(const auto& c : list) {
             std::cout << c << std::endl;
         }
+
+        this->testConnection.disconnect();
+        this->testConnection2.disconnect();
+        this->testConnection3.disconnect();
+        this->testConnection4.disconnect();
+        this->testConnection5.disconnect();
     }
 
     void update() {

@@ -1,4 +1,5 @@
 #pragma once
+#include "thuw/Signal/Signal.hpp"
 #include "thuw/Window/Window.hpp"
 #include <GLFW/glfw3.h>
 #include <functional>
@@ -7,31 +8,33 @@
 #include <vector>
 
 namespace thuw {
-    template<class Scene>
     class Keyboard;
+    
+    namespace Key::Global {
+        thuw::Signal<void(void)> Signal;
+    }
 }
 
-// TODO:
-template<class Scene>
 class thuw::Keyboard {
 public:
     Keyboard() {};
 
-    template<const int Key>
-    void pressed(const std::function<void(void)>&& callback) {
-        // const auto press = [&callback]{
-        //     // if ... key  == getkey()
+    template<const int Key, typename Function>
+    auto pressed(Function&& callback) -> thuw::Connection<void(void)>
+    {
+        const auto&& press = [&callback]{
+                // if ... key  == getkey()
 
-        //     callback();
-        // };
+                callback();
+            };
 
-        // connect
+        return thuw::Key::Global::Signal.connect(press);
     }
     
 };
 
-namespace thuw {
-    enum Key : const int {
+namespace thuw::Key {
+    enum : const int {
         UNKNOWN = GLFW_KEY_UNKNOWN,
         SPACE = GLFW_KEY_SPACE,
         APOSTROPHE = GLFW_KEY_APOSTROPHE,

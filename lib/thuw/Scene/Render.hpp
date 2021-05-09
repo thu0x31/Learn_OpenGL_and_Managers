@@ -1,6 +1,7 @@
 #pragma once
 #include "First/FirstScene.hpp"
 #include "Scene.hpp"
+#include "thuw/Keyboard/Key.hpp"
 #include "thuw/Window/Window.hpp"
 #include "Transitioner.hpp"
 #include "List.hpp"
@@ -24,7 +25,7 @@ private:
     const SceneList sceneList;
 public:
     Render(const Window&& targetWindow, const SceneList&& sceneList) 
-    : window(targetWindow), sceneList(sceneList) {} //TODO: move constructor必要かも
+    : window(targetWindow), sceneList(sceneList) {}
 
     // TODO: emscripten
     template<class Scene>
@@ -33,10 +34,8 @@ public:
         scene->setup();
 
         while (this->window.isClose()) {
-            //      key signal()
-
+            thuw::Key::Global::Signal();
             
-
             scene->update();
 
             this->window.swapBuffers();

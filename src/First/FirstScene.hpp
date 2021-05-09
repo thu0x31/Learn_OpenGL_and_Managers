@@ -16,13 +16,14 @@
 class FirstScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
-    // thuw::Key key;
+    thuw::Keyboard key;
+    thuw::Connection<void()> keyConnection;
 
     FirstScene()
     {
-        // this->key.pressed<thuw::Key::E>([&]{
-        //     this->transition("Triangle");
-        // });
+        this->keyConnection = this->key.pressed<thuw::Key::E>([]{
+            // this->transition("Triangle");
+        });
     }
     
     void setup() {

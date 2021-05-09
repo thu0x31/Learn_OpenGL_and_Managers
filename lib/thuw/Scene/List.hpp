@@ -19,6 +19,7 @@ class thuw::Scene::List {
 public:
     const std::unordered_map<std::string, thuw::Scene::Interface*> sceneMap;
 
+    // コピーしてしまうとScene::signalが死ぬのでここでSceneを作る
     List() : sceneMap({{SceneClass::Name, new SceneClass()}... }) {}
 
     [[nodiscard]] auto operator[](const std::string& name) const {
