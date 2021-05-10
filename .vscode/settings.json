@@ -9,5 +9,15 @@
         "CMAKE_MAKE_PROGRAM": "/usr/bin/make"
     },
 
-    "cSpell.userWords": ["thuw", "GLFW", "emscripten", "GLfloat", "GLuint"],
+    "cSpell.userWords": [
+        "thuw",
+        "GLFW",
+        "emscripten",
+        "GLfloat",
+        "GLuint"
+    ],
+    "cSpell.words": [
+        "compdb",
+        "compiledb"
+    ],
 }
