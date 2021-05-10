@@ -1,3 +1,5 @@
 build/*
 emscripten/build/*
 .cache/*
+
+.vscode/launch.json
