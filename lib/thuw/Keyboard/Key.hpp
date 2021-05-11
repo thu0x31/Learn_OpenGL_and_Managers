@@ -24,7 +24,8 @@ public:
     template<const int Key, typename Function>
     Connection pressed(Function&& callback)
     {
-        const auto&& press = [&callback] (GLFWwindow* window)->void {                
+        const auto&& press = [&callback] (GLFWwindow* window)->void {    
+                // TODO: multi thread            
                 if(GLFW_PRESS == glfwGetKey(window, Key)) {
                     callback();
                 }

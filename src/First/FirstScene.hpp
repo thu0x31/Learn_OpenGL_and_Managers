@@ -21,8 +21,8 @@ public:
 
     FirstScene()
     {
-        this->keyConnection = this->key.pressed<thuw::Key::E>([]{
-            // this->transition("Triangle");
+        this->keyConnection = this->key.pressed<thuw::Key::E>([&]{
+            thuw::Scene::Transition("Triangle");
         });
     }
     

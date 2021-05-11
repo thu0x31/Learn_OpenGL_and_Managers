@@ -5,6 +5,7 @@
 #include "thuw/Window/Window.hpp"
 #include "Transitioner.hpp"
 #include "List.hpp"
+#include <iterator>
 
 #ifndef NDEBUG
     #include <iostream>
@@ -22,7 +23,7 @@ class thuw::Scene::Render {
 private:
     //TODO: emscripten
     thuw::Window window;
-    const SceneList sceneList;
+    SceneList sceneList;
 public:
     Render(const Window&& targetWindow, const SceneList&& sceneList) 
     : window(targetWindow), sceneList(sceneList) {}
@@ -30,11 +31,19 @@ public:
     // TODO: emscripten
     template<class Scene>
     void loop() {
-        auto&& scene = this->sceneList[Scene::Name];
+        thuw::Scene::Interface* scene = this->sceneList[Scene::Name];
         scene->setup();
 
         while (this->window.isClose()) {
-            thuw::Key::Global::Signal(this->window.glfwWwindow());
+            if(this->isWaitSceneTransition()) {
+                scene = this->transitionScene();
+
+                #ifndef NDEBUG
+                    std::cout << "Transitioned" << std::endl;
+                #endif
+            }
+
+            Key::Global::Signal(this->window.glfwWwindow());
             
             scene->update();
 
@@ -42,5 +51,17 @@ public:
             glfwPollEvents();
         }
         this->window.close();
+    }
+
+private:
+    bool isWaitSceneTransition() const {
+        return Scene::TransitionSignal.hasSlot();
+    }
+
+    Scene::Interface* transitionScene() {
+        const auto&& name = Scene::TransitionSignal.slotList.back()();
+        Scene::TransitionConnection.disconnect();
+
+        return this->sceneList[name];
     }
 };

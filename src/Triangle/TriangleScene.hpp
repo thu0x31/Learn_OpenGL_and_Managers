@@ -32,16 +32,12 @@ public:
 
     TriangleScene()
     {
-        this->keyboard.pressed<thuw::Key::W>([]{
-
+        this->keyboard.pressed<thuw::Key::A>([&]{
+            this->program.use();
+            this->vao.bind();
+            // glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         });
-
-        // this->key.pressed<thuw::Key::A>([&]{
-        //     this->program.use();
-        //     this->vao.bind();
-        //     // glDrawArrays(GL_TRIANGLES, 0, 3);
-        //     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // });
 
         // TODO: 
         std::string currentFilePath(__FILE__);
