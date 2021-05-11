@@ -17,7 +17,7 @@ class FirstScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "First";// TODO: 存在を保証されない
     thuw::Keyboard key;
-    thuw::Connection<void()> keyConnection;
+    thuw::Keyboard::Connection keyConnection;
 
     FirstScene()
     {
@@ -36,6 +36,5 @@ public:
     }
 
     void update() {
-        // thuw::Scene::transition("Triangle");
     }
 };

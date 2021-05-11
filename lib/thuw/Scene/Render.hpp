@@ -21,7 +21,7 @@ template<class SceneList>
 class thuw::Scene::Render {
 private:
     //TODO: emscripten
-    const thuw::Window window;
+    thuw::Window window;
     const SceneList sceneList;
 public:
     Render(const Window&& targetWindow, const SceneList&& sceneList) 
@@ -34,7 +34,7 @@ public:
         scene->setup();
 
         while (this->window.isClose()) {
-            thuw::Key::Global::Signal();
+            thuw::Key::Global::Signal(this->window.glfwWwindow());
             
             scene->update();
 

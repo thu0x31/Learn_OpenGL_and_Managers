@@ -22,8 +22,7 @@ int main() {
         TestScene
     >();
 
-    thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<TestScene>();
-    // thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<TriangleScene>();
+    thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<FirstScene>();
 
     return 0;
 }

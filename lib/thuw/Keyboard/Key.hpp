@@ -11,26 +11,27 @@ namespace thuw {
     class Keyboard;
     
     namespace Key::Global {
-        thuw::Signal<void(void)> Signal;
+        thuw::Signal<void(GLFWwindow*)> Signal;
     }
 }
 
 class thuw::Keyboard {
 public:
-    Keyboard() {};
+    using Connection = thuw::Signal<void(GLFWwindow*)>::Connection;
+
+    Keyboard() = default;
 
     template<const int Key, typename Function>
-    auto pressed(Function&& callback) -> thuw::Connection<void(void)>
+    Connection pressed(Function&& callback)
     {
-        const auto&& press = [&callback]{
-                // if ... key  == getkey()
-
-                callback();
+        const auto&& press = [&callback] (GLFWwindow* window)->void {                
+                if(GLFW_PRESS == glfwGetKey(window, Key)) {
+                    callback();
+                }
             };
 
         return thuw::Key::Global::Signal.connect(press);
     }
-    
 };
 
 namespace thuw::Key {

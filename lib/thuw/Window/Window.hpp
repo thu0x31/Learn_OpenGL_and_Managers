@@ -73,7 +73,7 @@ public:
         glfwSetWindowShouldClose(this->window, true);
     }
 
-    [[nodiscard]] auto glfwWwindow() const {
+    [[nodiscard]] auto glfwWwindow()->GLFWwindow* {
         return this->window;
     }
 
