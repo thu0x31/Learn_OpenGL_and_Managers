@@ -26,20 +26,34 @@ class TriangleScene final : public thuw::Scene::Interface {
 public:
     static constexpr auto Name = "Triangle";
     thuw::Keyboard keyboard;
-    // TODO: global
-    thuw::Shader::Program program;
+    thuw::Keyboard::Connection keyConnection;
+    thuw::Keyboard::Connection keyConnection3;
+
     thuw::VAO vao;
 
-    TriangleScene()
-    {
-        this->keyboard.pressed<thuw::Key::A>([&]{
-            this->program.use();
+    TriangleScene() {
+        this->keyConnection = this->keyboard.pressed<thuw::Key::A>([&]{
+            thuw::Shader::Global::Program.use();
             this->vao.bind();
-            // glDrawArrays(GL_TRIANGLES, 0, 3);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         });
 
-        // TODO: 
+        this->keyConnection3 = this->keyboard.pressed<thuw::Key::Q>([&]{
+            std::cout << "test" << std::endl;
+        });
+    }
+
+    void setup() {   
+        #ifndef NDEBUG
+            std::cout << this->Name << std::endl;
+        #endif
+
+        this->vao.init();
+
+        glClearColor(0.1,0.1, 0.2, 1.);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // TODO: fix
         std::string currentFilePath(__FILE__);
         currentFilePath.erase(
             currentFilePath.begin() + currentFilePath.rfind("/"),
@@ -49,8 +63,8 @@ public:
         const auto&& vertexShader = thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert");
         const auto&& fragmentShader = thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag");
 
-        program.attach(vertexShader, fragmentShader);
-        program.link(vertexShader, fragmentShader);
+        thuw::Shader::Global::Program.attach(vertexShader, fragmentShader);
+        thuw::Shader::Global::Program.link(vertexShader, fragmentShader);
 
         constexpr auto vertices = thuw::Vertices{
             thuw::Vec{0.5f, 0.5f, 0.0f},
@@ -76,22 +90,9 @@ public:
         vao.unbind();
     }
 
-    void setup() {
-        #ifndef NDEBUG
-            std::cout << this->Name << std::endl;
-        #endif
-
-        glClearColor(0.5,0.5, 0.2, 1.);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     void update() {
-        glClearColor(0.1,0.1, 0.2, 1.);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        this->program.use();
+        thuw::Shader::Global::Program.use();
         this->vao.bind();
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 };

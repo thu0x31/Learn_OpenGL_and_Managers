@@ -2,6 +2,7 @@
 #include "First/FirstScene.hpp"
 #include "Scene.hpp"
 #include "thuw/Keyboard/Key.hpp"
+#include "thuw/Shader/Program.hpp"
 #include "thuw/Window/Window.hpp"
 #include "Transitioner.hpp"
 #include "List.hpp"
@@ -14,54 +15,37 @@
 #endif
 
 namespace thuw::Scene {
-    template<class SceneList>
-    class Render;
+    template<class Window, class SceneList, class SelectSceneName>
+    void Rendering(Window&& window, SceneList&& sceneList, SelectSceneName&& name);
 }
 
-template<class SceneList>
-class thuw::Scene::Render {
-private:
-    //TODO: emscripten
-    thuw::Window window;
-    SceneList sceneList;
-public:
-    Render(const Window&& targetWindow, const SceneList&& sceneList) 
-    : window(targetWindow), sceneList(sceneList) {}
+template<class Window, class SceneList, class SelectSceneName>
+void thuw::Scene::Rendering(Window&& window, SceneList&& sceneList, SelectSceneName&& name) {
+    thuw::Shader::initProgram();
 
-    // TODO: emscripten
-    template<class Scene>
-    void loop() {
-        thuw::Scene::Interface* scene = this->sceneList[Scene::Name];
-        scene->setup();
+    thuw::Scene::Interface* scene = sceneList[name];
+    scene->setup();
 
-        while (this->window.isClose()) {
-            if(this->isWaitSceneTransition()) {
-                scene = this->transitionScene();
+    while (window.isClose() == false) {
 
-                #ifndef NDEBUG
-                    std::cout << "Transitioned" << std::endl;
-                #endif
-            }
+        // TODO: prototype
+        if(Scene::Transitioner::WantTransition()) {
+            scene = sceneList[Scene::Transitioner::ToName()];
+            scene->setup();
+            Scene::Transitioner::resetToName();
 
-            Key::Global::Signal(this->window.glfwWwindow());
-            
-            scene->update();
-
-            this->window.swapBuffers();
-            glfwPollEvents();
+           #ifndef NDEBUG
+                std::cout << "Transitioned" << std::endl;
+            #endif
         }
-        this->window.close();
+
+        Key::Global::Press(window.glfwWwindow());
+         
+        scene->update();
+
+        window.swapBuffers();
+        glfwPollEvents();
     }
 
-private:
-    bool isWaitSceneTransition() const {
-        return Scene::TransitionSignal.hasSlot();
-    }
-
-    Scene::Interface* transitionScene() {
-        const auto&& name = Scene::TransitionSignal.slotList.back()();
-        Scene::TransitionConnection.disconnect();
-
-        return this->sceneList[name];
-    }
-};
+    window.close();
+}

@@ -14,15 +14,15 @@
 #include <memory>
 
 int main() {
-    const auto&& window = thuw::Window(800,600, "test");
+    auto&& window = thuw::Window(800,600, "thuthuthu");
 
-    const auto&& sceneList = thuw::Scene::List<
-        FirstScene,
-        TriangleScene,
-        TestScene
-    >();
+    const auto sceneList = thuw::Scene::List(
+        new FirstScene(),
+        new TriangleScene(),
+        new TestScene()
+    );
 
-    thuw::Scene::Render(std::move(window), std::move(sceneList)).loop<FirstScene>();
+    thuw::Scene::Rendering(std::move(window), std::move(sceneList), TriangleScene::Name);
 
     return 0;
 }

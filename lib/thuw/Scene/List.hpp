@@ -9,20 +9,20 @@
 #include <unordered_map>
 
 namespace thuw::Scene {
-    template<SceneConcept ...SceneClass>
+    template<class ...SceneClass>
     class List;
 }
 
 // VO
-template<SceneConcept ...SceneClass>
+template<class ...SceneClass>
 class thuw::Scene::List {
 public:
     const std::unordered_map<std::string, thuw::Scene::Interface*> sceneMap;
 
-    // コピーしてしまうとScene::signalが死ぬのでここでSceneを作る
-    List() : sceneMap({{SceneClass::Name, new SceneClass()}... }) {}
+    List(SceneClass&& ...scene) : sceneMap({{scene->Name, scene} ... }) {}
 
-    [[nodiscard]] auto operator[](const std::string& name) const {
+    template<typename SceneName>
+    [[nodiscard]] auto operator[](SceneName&& name) const {
         assert(List::sceneMap.contains(name));
 
         return List::sceneMap.at(name);

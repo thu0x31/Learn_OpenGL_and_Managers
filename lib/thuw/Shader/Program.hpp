@@ -6,16 +6,17 @@
 #include <vector>
 
 namespace thuw::Shader {
-    struct Program;
+    class Program;
 }
 
 // TODO: global
-struct thuw::Shader::Program {
-private:
-    const GLuint id;
-
+class thuw::Shader::Program {
 public:
-    Program() : id(glCreateProgram()) {
+    GLuint id;
+
+    Program() = default;
+
+    Program(GLuint id) : id(id) {
         #ifndef NDEBUG
             std::cout << "create Program : id:" << this->id << std::endl;
         #endif
@@ -50,6 +51,20 @@ public:
     }
 
     void use() const {
+        #ifndef NDEBUG
+            std::cout << "use Program id : " << this->id << std::endl;
+        #endif
+
         glUseProgram(this->id);
     }
 };
+
+namespace thuw::Shader {
+    namespace Global {
+        Shader::Program Program;
+    }
+
+    void initProgram() {
+        thuw::Shader::Global::Program.id = glCreateProgram();
+    }
+}

@@ -62,7 +62,7 @@ private:
 
 public:
     [[nodiscard]] bool isClose() const {
-        return !glfwWindowShouldClose(this->window);
+        return glfwWindowShouldClose(this->window);
     }
 
     void swapBuffers() const {

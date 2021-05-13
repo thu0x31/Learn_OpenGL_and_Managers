@@ -16,15 +16,31 @@ private:
     GLuint stride;
 
 public:
-    VAO() {
+    VAO() = default;
+
+    VAO(VAO& vao) {
+        this->id = vao.id;
+        this->stride = vao.stride;
+    }
+
+    VAO(VAO&& vao) {
+        this->id = vao.id;
+        this->stride = vao.stride;
+    }
+
+    void init() {
         glGenVertexArrays(1, &this->id);
-        
+
         #ifndef NDEBUG
-            std::cout << "create VAO : id:" << this->id << std::endl;
+            std::cout << "init VAO is : " << id << std::endl;
         #endif
     }
 
     void bind() const {
+        #ifndef NDEBUG
+            std::cout << "use VAO is : " << id << std::endl;
+        #endif
+
         glBindVertexArray(this->id);
     }
 

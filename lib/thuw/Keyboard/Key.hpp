@@ -11,7 +11,7 @@ namespace thuw {
     class Keyboard;
     
     namespace Key::Global {
-        thuw::Signal<void(GLFWwindow*)> Signal;
+        thuw::Signal<void(GLFWwindow*)> Press;
     }
 }
 
@@ -28,10 +28,14 @@ public:
                 // TODO: multi thread            
                 if(GLFW_PRESS == glfwGetKey(window, Key)) {
                     callback();
+
+                    #ifndef NDEBUG
+                        std::cout << "key press: " << Key << std::endl;
+                    #endif
                 }
             };
 
-        return thuw::Key::Global::Signal.connect(press);
+        return thuw::Key::Global::Press.connect(press);
     }
 };
 
