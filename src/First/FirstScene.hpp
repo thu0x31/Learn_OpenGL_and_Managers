@@ -2,8 +2,9 @@
 #include "Triangle/TriangleScene.hpp"
 #include "glad/glad.h"
 #include "thuw/Scene/List.hpp"
+#include "thuw/Scene/Manager.hpp"
 #include "thuw/Scene/Scene.hpp"
-#include "thuw/Keyboard/Key.hpp"
+#include "thuw/Keyboard/Keyboard.hpp"
 #include "thuw/Scene/Transitioner.hpp"
 #include <functional>
 #include "thuw/Signal/Signal.hpp"
@@ -15,26 +16,22 @@
 
 class FirstScene final : public thuw::Scene::Interface {
 public:
-    static constexpr auto Name = "First";// TODO: 存在を保証されない
+    static constexpr auto Name = "First";
     thuw::Keyboard key;
     thuw::Keyboard::Connection keyConnection;
 
     FirstScene()
     {
-        this->keyConnection = this->key.pressed<thuw::Key::E>([&]{
-            thuw::Scene::Transition("Triangle");
+        this->keyConnection = this->key.pressed<thuw::Key::E>([] {
+            thuw::Scene::Manager::Transition<TriangleScene>();
         });
-    }
-    
-    void setup() {
-        #ifndef NDEBUG
-            std::cout << this->Name << std::endl;
-        #endif
+
+        // TODO: draw thread
         glClearColor(0.2,0.5, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
-
     }
 
     void update() {
+        
     }
 };

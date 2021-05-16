@@ -2,7 +2,7 @@
 
 #include "glad/glad.h"
 #include "thuw/Scene/Scene.hpp"
-#include "thuw/Keyboard/Key.hpp"
+#include "thuw/Keyboard/Keyboard.hpp"
 #include "thuw/Scene/Transitioner.hpp"
 #include "thuw/Shader/Vertex.hpp"
 #include "thuw/Shader/Fragment.hpp"
@@ -30,10 +30,12 @@ public:
     thuw::Keyboard::Connection keyConnection3;
 
     thuw::VAO vao;
+    thuw::Shader::Program program;
 
-    TriangleScene() {
+    TriangleScene() 
+    {
         this->keyConnection = this->keyboard.pressed<thuw::Key::A>([&]{
-            thuw::Shader::Global::Program.use();
+            this->program.use();
             this->vao.bind();
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         });
@@ -41,12 +43,6 @@ public:
         this->keyConnection3 = this->keyboard.pressed<thuw::Key::Q>([&]{
             std::cout << "test" << std::endl;
         });
-    }
-
-    void setup() {   
-        #ifndef NDEBUG
-            std::cout << this->Name << std::endl;
-        #endif
 
         this->vao.init();
 
@@ -63,8 +59,8 @@ public:
         const auto&& vertexShader = thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert");
         const auto&& fragmentShader = thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag");
 
-        thuw::Shader::Global::Program.attach(vertexShader, fragmentShader);
-        thuw::Shader::Global::Program.link(vertexShader, fragmentShader);
+        program.attach(vertexShader, fragmentShader);
+        program.link(vertexShader, fragmentShader);
 
         constexpr auto vertices = thuw::Vertices{
             thuw::Vec{0.5f, 0.5f, 0.0f},
@@ -91,8 +87,5 @@ public:
     }
 
     void update() {
-        thuw::Shader::Global::Program.use();
-        this->vao.bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 };

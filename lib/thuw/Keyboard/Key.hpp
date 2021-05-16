@@ -1,43 +1,5 @@
 #pragma once
-#include "thuw/Signal/Signal.hpp"
-#include "thuw/Window/Window.hpp"
 #include <GLFW/glfw3.h>
-#include <functional>
-#include <initializer_list>
-#include <utility>
-#include <vector>
-
-namespace thuw {
-    class Keyboard;
-    
-    namespace Key::Global {
-        thuw::Signal<void(GLFWwindow*)> Press;
-    }
-}
-
-class thuw::Keyboard {
-public:
-    using Connection = thuw::Signal<void(GLFWwindow*)>::Connection;
-
-    Keyboard() = default;
-
-    template<const int Key, typename Function>
-    Connection pressed(Function&& callback)
-    {
-        const auto&& press = [&callback] (GLFWwindow* window)->void {    
-                // TODO: multi thread            
-                if(GLFW_PRESS == glfwGetKey(window, Key)) {
-                    callback();
-
-                    #ifndef NDEBUG
-                        std::cout << "key press: " << Key << std::endl;
-                    #endif
-                }
-            };
-
-        return thuw::Key::Global::Press.connect(press);
-    }
-};
 
 namespace thuw::Key {
     enum : const int {

@@ -22,7 +22,7 @@ template<typename ...Num>
 class thuw::Vec {
 public:
     static constexpr std::size_t dimension = sizeof...(Num);
-    const std::array<GLfloat, dimension> vec;
+    std::array<GLfloat, dimension> vec;
 
     enum : const int {
         X = 0,
@@ -40,6 +40,7 @@ public:
     }
 
     constexpr GLfloat y() const {
+        static_assert(dimension > Y);
         return this->vec[Y];
     }
 

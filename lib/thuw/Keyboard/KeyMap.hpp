@@ -1,5 +1,5 @@
 #pragma once
-#include "Key.hpp"
+#include "Keyboard.hpp"
 
 namespace thuw {
     class KeyMap;

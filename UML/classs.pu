@@ -1,63 +1,55 @@
 @startuml thux
 ' eventは各自のオブジェクトが持ちたい
 
-class GLFWWindow {
-    emscriptenの場合不要
-}
-GLFWWindow "1" -> "1" Window
+package Window {
+    class GLFWWindow {
+        emscriptenの場合不要
+    }
+    GLFWWindow "1" -> "1" Window
 
-class Window {
-    setup([](){})
-    update([](){} update)
+    class Window {
+    }
 }
-' Window --> Scene
-' Window --> Geometry
 
 package Scene {
-
-    class Scene::List {
-        map<id, Scene*> sceneList
-        Scene* currentScene
+    class Scene::Manager {
+        Transition()
     }
-    Scene::List "n" o-- "1" Scene
+    Scene "1" -> "1" Scene::Manager
+    Keyboard "1" --o "n" Scene
     
     class Scene::Render {
-        Window
-        Scene::List
         loop()
     }
-    Window "1" -> "1" Scene::Render
-    Scene::List "1" -> "1" Scene::Render
+    Window "1" --> "1" Scene::Render
+    Scene::Manager "1" -> Scene::Render
 
-    Scene <|- SceneInterface
+    SceneInterface <|- Scene
     interface SceneInterface {
-        setup()
-        update()
-        preTransition()
+        update() // update thread
+        draw() // draw thread
     }
+}
 
-    Scene <-- Trasitioner
-    abstract Trasitioner {
-        Scene::List
-        transition()
-    }
+class Signal {
+
+}
+Signal "n" o- "1" Slot
+
+class Slot {
+
 }
 
 package Keyboard {
-    ' 1 : n ? key('e')
-    ' 1 : 1 key().press('e')
+
+    Keyboard <- Signal
+    class Keyboard {
+        pressed<Key>(function())
+        press()
+    }
     
     class Key {
-        keyName
-
-        ' signal slot
-        release(actionName, [](){})
-        press(actionName, [](){})
-        repeat(actionName, [](){})
-    }
-
-    class Mapper {
-        map<actionName, KeyID>
+        enum
     }
 }
 
@@ -71,10 +63,6 @@ package Geometry {
 
     Geometry o-- Attribute
 
-    object LazyLoadFunctions {
-
-    }
-    LazyLoadFunctions .> Geometry
 
     class Attribute {
         pair<string name, T> value

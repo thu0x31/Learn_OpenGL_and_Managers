@@ -12,7 +12,6 @@
 
 template<class SceneClass>
 concept SceneConcept = requires(SceneClass scene){
-    scene.setup();
     scene.update();
 };
 
@@ -22,6 +21,6 @@ namespace thuw::Scene {
 
 class thuw::Scene::Interface {
 public:
-    virtual void setup() = 0;
+    virtual ~Interface() {};
     virtual void update() = 0;
 };

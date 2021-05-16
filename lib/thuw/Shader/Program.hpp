@@ -11,38 +11,41 @@ namespace thuw::Shader {
 
 // TODO: global
 class thuw::Shader::Program {
+private:
+    static inline GLuint id;
+
 public:
-    GLuint id;
-
-    Program() = default;
-
-    Program(GLuint id) : id(id) {
-        #ifndef NDEBUG
-            std::cout << "create Program : id:" << this->id << std::endl;
-        #endif
+    static inline void init() {
+        Program::id = glCreateProgram();
     }
+
+    Program(){
+        #ifndef NDEBUG
+            std::cout << Program::id << std::endl;
+        #endif
+    };
 
     template<class ...ShaderList>
     void attach(const ShaderList& ...shader) const {
-        (glAttachShader(this->id, shader.id), ...);
+        (glAttachShader(Program::id, shader.id), ...);
 
         #ifndef NDEBUG
             ([&]{
-                std::cout << "Attach: Program id:" << this->id << " Shader id:" << shader.id << std::endl;
+                std::cout << "Attach: Program id:" << Program::id << " Shader id:" << shader.id << std::endl;
             }(), ...);
         #endif
     }
 
     template<class ...ShaderList>
     void link(const ShaderList& ...shader) const {
-        glLinkProgram(this->id);
+        glLinkProgram(Program::id);
 
         #ifndef NDEBUG
             int success;
-            glGetProgramiv(this->id, GL_LINK_STATUS, &success);
+            glGetProgramiv(Program::id, GL_LINK_STATUS, &success);
             if(!success) {
                 char infoLog[512];
-                glGetProgramInfoLog(this->id, 512, NULL, infoLog);
+                glGetProgramInfoLog(Program::id, 512, NULL, infoLog);
                 std::cout << "ERROR:Shader:Program:LINK: " << infoLog << std::endl;
             }
         #endif
@@ -52,19 +55,9 @@ public:
 
     void use() const {
         #ifndef NDEBUG
-            std::cout << "use Program id : " << this->id << std::endl;
+            std::cout << "use Program id : " << Program::id << std::endl;
         #endif
 
-        glUseProgram(this->id);
+        glUseProgram(Program::id);
     }
 };
-
-namespace thuw::Shader {
-    namespace Global {
-        Shader::Program Program;
-    }
-
-    void initProgram() {
-        thuw::Shader::Global::Program.id = glCreateProgram();
-    }
-}

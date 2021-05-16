@@ -1,12 +1,17 @@
 #pragma once
 #include "First/FirstScene.hpp"
 #include "Scene.hpp"
-#include "thuw/Keyboard/Key.hpp"
+#include "Triangle/TriangleScene.hpp"
+#include "thuw/Keyboard/Keyboard.hpp"
+#include "thuw/Scene/Manager.hpp"
 #include "thuw/Shader/Program.hpp"
 #include "thuw/Window/Window.hpp"
 #include "Transitioner.hpp"
 #include "List.hpp"
+#include <functional>
 #include <iterator>
+#include <thread>
+#include <utility>
 
 #ifndef NDEBUG
     #include <iostream>
@@ -15,33 +20,24 @@
 #endif
 
 namespace thuw::Scene {
-    template<class Window, class SceneList, class SelectSceneName>
-    void Rendering(Window&& window, SceneList&& sceneList, SelectSceneName&& name);
+    template<class SceneType>
+    void Rendering(thuw::Window&& window);
 }
 
-template<class Window, class SceneList, class SelectSceneName>
-void thuw::Scene::Rendering(Window&& window, SceneList&& sceneList, SelectSceneName&& name) {
-    thuw::Shader::initProgram();
+template<class SceneType>
+void thuw::Scene::Rendering(thuw::Window&& window)
+{
+    Shader::Program::init();
+    Scene::Manager::init<SceneType>();
 
-    thuw::Scene::Interface* scene = sceneList[name];
-    scene->setup();
+    // update
 
-    while (window.isClose() == false) {
+    while (window.isClose() == false) // draw 
+    {
+        Keyboard::PressIf(window.glfwWindow());
+        thuw::Scene::Manager::TransitionIf();
 
-        // TODO: prototype
-        if(Scene::Transitioner::WantTransition()) {
-            scene = sceneList[Scene::Transitioner::ToName()];
-            scene->setup();
-            Scene::Transitioner::resetToName();
-
-           #ifndef NDEBUG
-                std::cout << "Transitioned" << std::endl;
-            #endif
-        }
-
-        Key::Global::Press(window.glfwWwindow());
-         
-        scene->update();
+        Scene::Manager::currentScene->update();
 
         window.swapBuffers();
         glfwPollEvents();

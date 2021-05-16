@@ -1,64 +1,64 @@
-#pragma once
-#include "Scene.hpp"
-#include "thuw/Signal/Signal.hpp"
-#include <GLFW/glfw3.h>
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <ostream>
-#include <string>
-#include <unordered_map>
+// #pragma once
+// #include "Scene.hpp"
+// #include "thuw/Signal/Signal.hpp"
+// #include <GLFW/glfw3.h>
+// #include <algorithm>
+// #include <functional>
+// #include <iostream>
+// #include <memory>
+// #include <ostream>
+// #include <string>
+// #include <unordered_map>
 
-namespace thuw::Scene {
+// namespace thuw::Scene {
 
-    // TODO: multi Window
+//     // TODO: multi Window
 
-    class Transitioner;
+//     class Transitioner;
 
-    template<typename SceneName>
-    void Transition(SceneName&& sceneName);
-}
+//     template<typename SceneName>
+//     void Transition(SceneName&& sceneName);
+// }
 
-class thuw::Scene::Transitioner {
-public:
-    using Connection = thuw::Signal<void()>;
+// class thuw::Scene::Transitioner {
+// public:
+//     using Connection = thuw::Signal<void()>;
 
-    // Scene from;
-    // Scene to;
+//     // Scene from;
+//     // Scene to;
 
-    Transitioner() = default;
+//     Transitioner() = default;
 
-    template<class Function>
-    Connection transitioned() {
+//     template<class Function>
+//     Connection transitioned() {
 
-    }
+//     }
 
-public:
-    static inline std::string ToSceneName = "";
+// public:
+//     static inline std::string ToSceneName = "";
 
-    template<typename SceneName>
-    static inline void Transition(SceneName&& sceneName) {
-        // TODO: prototype
-        Scene::Transitioner::ToSceneName = sceneName;
-    }
+//     template<typename SceneName>
+//     static inline void Transition(SceneName&& sceneName) {
+//         // TODO: prototype
+//         Scene::Transitioner::ToSceneName = sceneName;
+//     }
 
-    static inline bool WantTransition() {
-        // TODO: prototype
-        return Scene::Transitioner::ToSceneName.empty() == false;
-    }
+//     static inline bool WantTransition() {
+//         // TODO: prototype
+//         return Scene::Transitioner::ToSceneName.empty() == false;
+//     }
 
-    static inline std::string ToName() {
-        return Scene::Transitioner::ToSceneName;
-    }
+//     static inline std::string ToName() {
+//         return Scene::Transitioner::ToSceneName;
+//     }
 
-    static inline void resetToName() {
-        ToSceneName = "";
-    }
-};
+//     static inline void resetToName() {
+//         ToSceneName = "";
+//     }
+// };
 
-template<typename SceneName>
-void thuw::Scene::Transition(SceneName&& sceneName) {
-    // TODO: prototype
-    Scene::Transitioner::ToSceneName = sceneName;
-}
+// template<typename SceneName>
+// void thuw::Scene::Transition(SceneName&& sceneName) {
+//     // TODO: prototype
+//     Scene::Transitioner::ToSceneName = sceneName;
+// }
