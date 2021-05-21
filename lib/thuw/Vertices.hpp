@@ -18,21 +18,30 @@
 
 
 namespace thuw {
-    template<size_t ...Size>
+    template<size_t Size, size_t D>
     class Vertices;
+
+
+    // Vertices< Type{int, float, double}, ListSize{3, 3, 3, 3}>
+    template<Number ...Type, size_t ...ListSize>
+    Vertices(const Type (&...list)[ListSize]) 
+    -> Vertices<sizeof...(ListSize), (ListSize + ...) / sizeof...(ListSize)>;
 }
 
-template<size_t ...Size>
+// vertices<float, Size = 4, VecD = 3>
+template<size_t Size, size_t D>
 class thuw::Vertices {
 public:
-    static constexpr auto sizes = std::make_tuple(Size...);
-    static constexpr std::size_t dimension = std::get<0>(sizes);
-    static constexpr std::size_t maxIndex = sizeof...(Size);
+    using Type = float;
 
-    std::array<std::array<float, dimension>, maxIndex> vertices;
+    static constexpr std::size_t dimension = D;
+    static constexpr std::size_t size = Size;
 
-    template<Number Type>
-    constexpr Vertices(const Type (&...list)[Size]) : vertices({std::to_array(list)...}) {}
+    using VecArray = std::array<Type, dimension>;
+    std::array<VecArray, size> vertices;
+
+    template<size_t ...ListSize>
+    constexpr Vertices(const Type (&...list)[ListSize]) : vertices({std::to_array(list)...}) {}
 
     constexpr auto data() const {
         return this->vertices.data();
