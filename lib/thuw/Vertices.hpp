@@ -2,32 +2,43 @@
 
 #include "glad/glad.h"
 #include "thuw/Vec.hpp"
+#include <algorithm>
 #include <array>
+#include <cstddef>
+#include <functional>
 #include <initializer_list>
+#include <iostream>
 #include <iterator>
+#include <locale>
+#include <ostream>
+#include <tuple>
 #include <type_traits>
 #include <vector>
+#include <string>
 
 
 namespace thuw {
-    template<VecConcept FirstVec, VecConcept ...ListVec>
+    template<size_t ...Size>
     class Vertices;
 }
 
-template<VecConcept FirstVec, VecConcept ...ListVec>
+template<size_t ...Size>
 class thuw::Vertices {
 public:
-    const std::array<FirstVec, sizeof...(ListVec) + 1> vertices;
-    static constexpr std::size_t dimension = FirstVec::dimension;
+    static constexpr auto sizes = std::make_tuple(Size...);
+    static constexpr std::size_t dimension = std::get<0>(sizes);
+    static constexpr std::size_t maxIndex = sizeof...(Size);
 
-    constexpr Vertices(FirstVec firstVec, ListVec ...list) : vertices({firstVec, list...}) {
-        static_assert(std::disjunction_v<std::is_same<FirstVec, ListVec>...>);
-        
-    }
+    std::array<std::array<float, dimension>, maxIndex> vertices;
+
+    template<Number Type>
+    constexpr Vertices(const Type (&...list)[Size]) : vertices({std::to_array(list)...}) {}
 
     constexpr auto data() const {
         return this->vertices.data();
     }
 
-    // TODO: rotate. sum. etc...
+    constexpr thuw::Vec<dimension> operator[](const std::size_t index) const {
+        return vertices[index];
+    }
 };
