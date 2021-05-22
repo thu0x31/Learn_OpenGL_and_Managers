@@ -37,7 +37,7 @@ public:
         glBindVertexArray(0);
     }
 
-    template<VBOConcept VBO>
+    template<thuw::Buffer::VBOConcept VBO>
     void copyInBuffer(const VBO& vbo, const GLenum usage = GL_STATIC_DRAW) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vbo.vertices), vbo.vertices.data(), usage);

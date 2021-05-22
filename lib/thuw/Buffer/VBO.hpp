@@ -8,14 +8,14 @@
 #include <utility>
 #include <vector>
 
-template<class VBOClass>
-concept VBOConcept = requires {
-    VBOClass::vertices;
-    VBOClass::id;
-    VBOClass::stride;
-};
-
 namespace thuw::Buffer {
+    template<class VBOClass>
+    concept VBOConcept = requires {
+        VBOClass::vertices;
+        VBOClass::id;
+        VBOClass::stride;
+    };
+
     template<class Vertices>
     class VBO;
 }
