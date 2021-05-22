@@ -18,9 +18,14 @@
 
 
 namespace thuw {
+    template<class Vertices>
+    concept VerticesClass = requires {
+        Vertices::dimension;
+        Vertices::size;
+    };
+
     template<size_t Size, size_t D>
     class Vertices;
-
 
     // Vertices< Type{int, float, double}, ListSize{3, 3, 3, 3}>
     template<Number ...Type, size_t ...ListSize>
@@ -28,7 +33,6 @@ namespace thuw {
     -> Vertices<sizeof...(ListSize), (ListSize + ...) / sizeof...(ListSize)>;
 }
 
-// vertices<float, Size = 4, VecD = 3>
 template<size_t Size, size_t D>
 class thuw::Vertices {
 public:
@@ -39,6 +43,8 @@ public:
 
     using VecArray = std::array<Type, dimension>;
     std::array<VecArray, size> vertices;
+
+    // TODO: Vertices(Vex...)
 
     template<size_t ...ListSize>
     constexpr Vertices(const Type (&...list)[ListSize]) : vertices({std::to_array(list)...}) {}

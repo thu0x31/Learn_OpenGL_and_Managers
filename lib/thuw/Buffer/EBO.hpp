@@ -6,22 +6,24 @@
 #include <iostream>
 #include <vector>
 
-template<class T>
-concept EBOConcept = requires {
-    T::indices;
-    T::id;
-};
-
 namespace thuw::Buffer {
+    template<class T>
+    concept EBOConcept = requires {
+        T::id;
+        T::indices;
+    };
+
+    // TODO: EBO{{}, {}, {}}
     template<typename ...Index>
     struct EBO;
 }
 
+// TODO: EBO<n , n>
 template<typename ...Index>
 struct thuw::Buffer::EBO {
-    GLuint id;
+    GLuint id = 0;
     const std::array<int, sizeof...(Index)> indices;
-    
+
     EBO(const Index& ...index) : indices({index...}) {
         glGenBuffers(1, &this->id);
 

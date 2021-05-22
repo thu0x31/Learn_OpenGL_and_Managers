@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ostream>
 #include <vector>
+#include <cassert>
 
 namespace thuw::Shader {
     class Program;
@@ -12,7 +13,7 @@ namespace thuw::Shader {
 // TODO: global
 class thuw::Shader::Program {
 private:
-    static inline GLuint id;
+    static inline GLuint id = 0;
 
 public:
     static inline void init() {
@@ -21,12 +22,13 @@ public:
 
     Program(){
         #ifndef NDEBUG
+            assert(Program::id != 0);
             std::cout << Program::id << std::endl;
         #endif
     };
 
     template<class ...ShaderList>
-    void attach(const ShaderList& ...shader) const {
+    static inline void attach(const ShaderList& ...shader) {
         (glAttachShader(Program::id, shader.id), ...);
 
         #ifndef NDEBUG
@@ -37,7 +39,7 @@ public:
     }
 
     template<class ...ShaderList>
-    void link(const ShaderList& ...shader) const {
+    static inline void link(const ShaderList& ...shader) {
         glLinkProgram(Program::id);
 
         #ifndef NDEBUG
@@ -53,7 +55,7 @@ public:
         (glDeleteShader(shader.id), ...);
     }
 
-    void use() const {
+    static inline void use() {
         #ifndef NDEBUG
             std::cout << "use Program id : " << Program::id << std::endl;
         #endif

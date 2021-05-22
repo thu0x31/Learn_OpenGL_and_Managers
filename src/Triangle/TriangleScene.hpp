@@ -10,12 +10,16 @@
 #include "thuw/Buffer/VBO.hpp"
 #include "thuw/Buffer/EBO.hpp"
 #include "thuw/Signal/Signal.hpp"
+#include "thuw/Geometry/Geometry.hpp"
 #include "thuw/VAO.hpp"
 #include "thuw/Vec.hpp"
 #include "thuw/Vertices.hpp"
+#include <algorithm>
 #include <array>
 #include <string>
+#include <utility>
 #include <vector>
+
 
 #ifndef NDEBUG
     #include <iostream>
@@ -29,23 +33,10 @@ public:
     thuw::Keyboard::Connection keyConnection;
     thuw::Keyboard::Connection keyConnection3;
 
-    thuw::VAO vao;
-    thuw::Shader::Program program;
+    // thuw::Geometry geo;
 
     TriangleScene() 
     {
-        this->keyConnection = this->keyboard.pressed<thuw::Key::A>([&]{
-            this->program.use();
-            this->vao.bind();
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        });
-
-        this->keyConnection3 = this->keyboard.pressed<thuw::Key::Q>([&]{
-            std::cout << "test" << std::endl;
-        });
-
-        this->vao.init();
-
         glClearColor(0.1,0.1, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -56,34 +47,27 @@ public:
             currentFilePath.end()
         );
 
-        const auto&& vertexShader = thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert");
-        const auto&& fragmentShader = thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag");
+        const auto&& geo = thuw::Geometry(
+            thuw::Vertices{
+                {0.5f, 0.5f, 0.0f},
+                {0.5f, -0.5f, 0.0f},
+                {-0.5f, -0.5f, 0.0f},
+                {-0.5f,  0.5f, 0.0f}},
+            thuw::Buffer::EBO{
+                0, 1, 3,
+                1, 2, 3
+            },
+            thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert"),
+            thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag")
+        );
 
-        program.attach(vertexShader, fragmentShader);
-        program.link(vertexShader, fragmentShader);
+        this->keyConnection = this->keyboard.pressed<thuw::Key::A>([geometry = std::move(geo)] {
+            geometry.draw();
+        });
 
-        constexpr auto vertices = thuw::Vertices{
-            thuw::Vec{0.5f, 0.5f, 0.0f},
-            thuw::Vec{0.5f, -0.5f, 0.0f},
-            thuw::Vec{-0.5f, -0.5f, 0.0f},
-            thuw::Vec{-0.5f,  0.5f, 0.0f}
-        };
-
-        const auto&& vbo = thuw::Buffer::VBO(vertices);
-        const auto&& ebo = thuw::Buffer::EBO{
-            0, 1, 3,
-            1, 2, 3
-        };
-
-        vao.bind();
-        vao.copyInBuffer(vbo);
-        vao.copyInBuffer(ebo);
-
-        constexpr int location = 0;
-        vao.setAttribute(location);
-
-        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        vao.unbind();
+        this->keyConnection3 = this->keyboard.pressed<thuw::Key::Q>([&] {
+            std::cout << "test" << std::endl;
+        });
     }
 
     void update() {

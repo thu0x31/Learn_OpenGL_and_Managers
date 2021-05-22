@@ -47,15 +47,13 @@ public:
     static constexpr std::size_t dimension = Dimension;
 
     std::array<Type, dimension> vec;
-
-    constexpr Vec(const Vec<Dimension>&){}
-    constexpr Vec(const Vec<Dimension>&&){}
     
     template<Number ...Num>
     constexpr Vec(Num&& ...num) : vec({static_cast<float>(num)...}){}
 
     constexpr Vec(std::array<Type, Dimension> arr) : vec(arr) {}
 
+public:
     constexpr float x() const {
         return this->vec[X];
     }

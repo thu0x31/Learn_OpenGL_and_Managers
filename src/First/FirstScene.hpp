@@ -8,6 +8,7 @@
 #include "thuw/Scene/Transitioner.hpp"
 #include <functional>
 #include "thuw/Signal/Signal.hpp"
+#include "thuw/Vertices.hpp"
 
 #ifndef NDEBUG
     #include <iostream>

@@ -12,22 +12,10 @@ namespace thuw {
 
 struct thuw::VAO {
 private:
-    GLuint id;
-    GLuint stride;
+    GLuint id = 0;
+    GLuint stride = 0;
 
 public:
-    VAO() = default;
-
-    VAO(VAO& vao) {
-        this->id = vao.id;
-        this->stride = vao.stride;
-    }
-
-    VAO(VAO&& vao) {
-        this->id = vao.id;
-        this->stride = vao.stride;
-    }
-
     void init() {
         glGenVertexArrays(1, &this->id);
 
@@ -61,7 +49,7 @@ public:
         #endif
     }
 
-    template<EBOConcept EBO>
+    template<thuw::Buffer::EBOConcept EBO>
     void copyInBuffer(const EBO& ebo, const GLenum usage = GL_STATIC_DRAW) const {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo.id);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ebo.indices), ebo.indices.data(), usage);

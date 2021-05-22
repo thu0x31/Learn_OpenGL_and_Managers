@@ -20,6 +20,7 @@ namespace thuw {
 
 // Key<enum>::Press -> connection
 //      scene "n" o-- "1" connection
+//      or Keyboard "n" o-- "1" connection
 
 class thuw::Keyboard {
 public:

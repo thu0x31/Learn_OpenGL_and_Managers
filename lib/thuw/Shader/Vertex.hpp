@@ -18,7 +18,7 @@ namespace thuw::Shader {
 
 class thuw::Shader::Vertex {
 public:
-    const GLuint id;
+    const GLuint id = 0;
     std::string code;
 
     Vertex(const std::string& shaderPath) : id(glCreateShader(GL_VERTEX_SHADER)) {
@@ -29,6 +29,7 @@ public:
 private:
     void path(const std::string& shaderPath) {
         #ifndef NDEBUG
+            assert(id != 0);
             std::cout << "VertexShader: id:" << this->id << " path:" << shaderPath << std::endl;
         #endif
 
