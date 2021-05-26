@@ -1,15 +1,16 @@
 #pragma once
 
-#include "thuw/Shader/Fragment.hpp"
-#include "thuw/Shader/Program.hpp"
-#include "thuw/Shader/Vertex.hpp"
-#include "thuw/VAO.hpp"
-#include "thuw/Vertices.hpp"
-#include "thuw/Geometry/Point.hpp"
+#include "thuw/Geometry/Attribute/Point.hpp"
+#include "thuw/GL/Shader/Fragment.hpp"
+#include "thuw/GL/Shader/Program.hpp"
+#include "thuw/GL/Shader/Vertex.hpp"
+#include "thuw/GL/VAO.hpp"
+#include "thuw/Math/Vec/Vertices.hpp"
 #include <vector>
 
-namespace thuw {
 
+// TODO: remove
+namespace thuw {
     class Geometry;
 }
 
@@ -34,13 +35,14 @@ public:
     struct Attribute {
         std::vector<thuw::Point> points; // Point::number != ::Index
         
-    }
-    attribute;
+    } attribute;
 
     thuw::VAO vao;
 
-    // template<thuw::VerticesClass Vertices, thuw::Buffer::EBOConcept EBO>
-    template<class Vertices, class EBO, class VertexShader, class FragmentShader>
+    template<class Vertices,
+            thuw::Buffer::EBOConcept EBO,
+            class VertexShader,
+            class FragmentShader>
     Geometry(
         Vertices&& vertices,
         EBO&& ebo,
@@ -59,6 +61,7 @@ public:
         vao.copyInBuffer(vbo);
         vao.copyInBuffer(ebo);
 
+        // TODO: if default Shader
         constexpr int location = 0;
         vao.setAttribute(location);
 

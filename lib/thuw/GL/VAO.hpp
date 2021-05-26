@@ -1,8 +1,9 @@
 #pragma once
 
 #include "glad/glad.h"
-#include "thuw/Buffer/EBO.hpp"
-#include "thuw/Buffer/VBO.hpp"
+#include "thuw/GL/Buffer/EBO.hpp"
+#include "thuw/GL/Buffer/VBO.hpp"
+#include <cassert>
 #include <iostream>
 #include <ostream>
 
@@ -26,6 +27,7 @@ public:
 
     void bind() const {
         #ifndef NDEBUG
+            assert(id != 0);
             std::cout << "use VAO is : " << id << std::endl;
         #endif
 

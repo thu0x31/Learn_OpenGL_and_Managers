@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iterator>
 #include <string>
-#include "thuw/Shader/Compile.hpp"
+#include "thuw/GL/Shader/Compile.hpp"
 
 #ifndef NDEBUG
     #include <iostream>

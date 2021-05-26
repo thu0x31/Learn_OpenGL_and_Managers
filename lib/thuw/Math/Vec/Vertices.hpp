@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glad/glad.h"
-#include "thuw/Vec.hpp"
+#include "thuw/Math/Vec/Vec.hpp"
 #include <algorithm>
 #include <array>
 #include <cstddef>

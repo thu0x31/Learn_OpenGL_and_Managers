@@ -4,7 +4,7 @@
 #include "Triangle/TriangleScene.hpp"
 #include "thuw/Keyboard/Keyboard.hpp"
 #include "thuw/Scene/Manager.hpp"
-#include "thuw/Shader/Program.hpp"
+#include "thuw/GL/Shader/Program.hpp"
 #include "thuw/Window/Window.hpp"
 #include "Transitioner.hpp"
 #include "List.hpp"
