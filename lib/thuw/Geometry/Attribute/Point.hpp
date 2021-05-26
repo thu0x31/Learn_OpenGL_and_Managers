@@ -17,7 +17,7 @@ struct thuw::Point {
         struct { float r, g, b , a; };
     };
 
-    template<VecConcept V>
+    template<Concepts::Vec V>
     constexpr Point(V&& vec) : vec(vec) {}
 
     constexpr auto normal() {

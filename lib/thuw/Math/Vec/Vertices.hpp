@@ -28,7 +28,7 @@ namespace thuw {
     class Vertices;
 
     // Vertices< Type{int, float, double}, ListSize{3, 3, 3, 3}>
-    template<Number ...Type, size_t ...ListSize>
+    template<Concepts::Numeric ...Type, size_t ...ListSize>
     Vertices(const Type (&...list)[ListSize]) 
     -> Vertices<sizeof...(ListSize), (ListSize + ...) / sizeof...(ListSize)>;
 }
@@ -44,8 +44,6 @@ public:
     using VecArray = std::array<Type, dimension>;
     std::array<VecArray, size> vertices;
 
-    // TODO: Vertices(Vex...)
-
     template<size_t ...ListSize>
     constexpr Vertices(const Type (&...list)[ListSize]) : vertices({std::to_array(list)...}) {}
 
@@ -53,7 +51,7 @@ public:
         return this->vertices.data();
     }
 
-    constexpr thuw::Vec<dimension> operator[](const std::size_t index) const {
+    constexpr thuw::Vec<Type, dimension> operator[](const std::size_t index) const {
         return vertices[index];
     }
 };

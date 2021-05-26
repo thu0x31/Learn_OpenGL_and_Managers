@@ -21,7 +21,7 @@ public:
     // bounding box
     // color
 
-    template<VecConcept Vec>
+    template<Concepts::Vec Vec>
     Triangle(Vec&& pos) : position(0, pos) {
         // TODO: constexpr triangale -> transform matrix -> scale matrix
 
