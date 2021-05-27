@@ -22,7 +22,9 @@
         "Programiv",
         "Transitioner",
         "Wwindow",
+        "adjugate",
         "compdb",
-        "compiledb"
+        "compiledb",
+        "defaultp"
     ],
 }

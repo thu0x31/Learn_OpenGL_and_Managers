@@ -4,6 +4,6 @@
 [submodule "lib/SPSCQueue"]
 	path = lib/SPSCQueue
 	url = https://github.com/rigtorp/SPSCQueue.git
-[submodule "lib/thuw/Math/Vec/linalg"]
-	path = lib/thuw/Math/Vec/linalg
-	url = https://github.com/sgorsten/linalg.git
+[submodule "lib/thuw/Math/Lib/glm"]
+	path = lib/thuw/Math/Lib/glm
+	url = https://github.com/g-truc/glm.git
