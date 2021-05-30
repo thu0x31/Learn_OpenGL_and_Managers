@@ -10,7 +10,7 @@
 #include "thuw/GL/Buffer/VBO.hpp"
 #include "thuw/GL/Buffer/EBO.hpp"
 #include "thuw/Signal/Signal.hpp"
-#include "thuw/Geometry/Geometry.hpp"
+#include "thuw/Shapes/Triangle/Triangle.hpp"
 #include "thuw/GL/VAO.hpp"
 #include "thuw/Math/Vec/Vec.hpp"
 #include "thuw/Math/Vec/Vertices.hpp"
@@ -40,26 +40,7 @@ public:
         glClearColor(0.1,0.1, 0.2, 1.);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // TODO: fix
-        std::string currentFilePath(__FILE__);
-        currentFilePath.erase(
-            currentFilePath.begin() + currentFilePath.rfind("/"),
-            currentFilePath.end()
-        );
-
-        const auto&& geo = thuw::Geometry(
-            thuw::Vertices{
-                {0.5f, 0.5f, 0.0f},
-                {0.5f, -0.5f, 0.0f},
-                {-0.5f, -0.5f, 0.0f},
-                {-0.5f,  0.5f, 0.0f}},
-            thuw::Buffer::EBO{
-                0, 1, 3,
-                1, 2, 3
-            },
-            thuw::Shader::Vertex(currentFilePath + "/shader/triangle.vert"),
-            thuw::Shader::Fragment(currentFilePath + "/shader/triangle.frag")
-        );
+        const auto&& geo = thuw::Shapes::Triangle(thuw::Vec3{0,0,0});
 
         this->keyConnection = this->keyboard.pressed<thuw::Key::A>([geometry = std::move(geo)] {
             geometry.draw();

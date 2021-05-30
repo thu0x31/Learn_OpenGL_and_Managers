@@ -8,8 +8,8 @@ namespace thuw {
 
 struct thuw::Point {
     union {
-        thuw::Vec4 vec;
-        struct { float x, y, z, w; };
+        thuw::Vec3 vec;
+        struct { float x, y, z; };
     };
 
     union {

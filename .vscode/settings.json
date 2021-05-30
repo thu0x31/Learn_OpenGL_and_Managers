@@ -4,9 +4,11 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "C_Cpp.intelliSenseEngine": "Disabled",
     
-    "cmake.generator": "Unix Makefiles",
+    // "cmake.generator": "Unix Makefiles",
+    "cmake.generator": "Ninja",
     "cmake.configureSettings": {
-        "CMAKE_MAKE_PROGRAM": "/usr/bin/make"
+        // "CMAKE_MAKE_PROGRAM": "/usr/bin/make"
+        "CMAKE_MAKE_PROGRAM": "/usr/bin/ninja"
     },
 
     "cSpell.userWords": [

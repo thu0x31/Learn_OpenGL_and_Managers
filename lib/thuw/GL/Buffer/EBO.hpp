@@ -31,4 +31,14 @@ struct thuw::Buffer::EBO {
             std::cout << "create EBO : id:" << this->id << std::endl;
         #endif
     }
+
+    void copyInBuffer(const GLenum usage) const {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), usage);
+
+        #ifndef NDEBUG
+            std::cout << "Copy in Buffer: EBO id:" << id
+             << " size:" << sizeof(indices) << std::endl;
+        #endif
+    }
 };

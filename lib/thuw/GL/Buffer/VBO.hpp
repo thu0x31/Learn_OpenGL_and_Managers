@@ -25,13 +25,22 @@ class thuw::Buffer::VBO {
 public:
     GLuint id;
     const Vertices vertices;
-    const std::size_t stride;// TODO:
 
-    VBO(Vertices vertices) : vertices(vertices), stride(vertices.dimension * sizeof(float)) {
+    VBO(Vertices vertices) : vertices(vertices) {
         glGenBuffers(1, &id);
         
         #ifndef NDEBUG
             std::cout << "create VBO : id:" << this->id << std::endl;
+        #endif
+    }
+
+    void copyInBuffer(const GLenum usage = GL_STATIC_DRAW) const {
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), usage);
+
+        #ifndef NDEBUG
+            std::cout << "Copy in Buffer: VBO id:" << id
+             << " size:" << sizeof(vertices) << std::endl;
         #endif
     }
 };

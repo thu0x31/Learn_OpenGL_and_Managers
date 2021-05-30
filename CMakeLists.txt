@@ -21,17 +21,23 @@ target_include_directories(${PROJECT_NAME} PUBLIC
                             "${CMAKE_SOURCE_DIR}/lib"
                             )
 
+# glm ---------------------------------------------------------------------------------
+add_subdirectory("${CMAKE_SOURCE_DIR}/lib/thuw/Math/Lib/glm")
+
+# glfw ---------------------------------------------------------------------------------
 # https://cmake.org/cmake/help/latest/module/FindOpenGL.html
 set(OpenGL_GL_PREFERENCE "GLVND")
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 
+# glad ---------------------------------------------------------------------------------
 add_subdirectory("${CMAKE_SOURCE_DIR}/lib/glad/")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
                         glad
                         glfw
+                        glm::glm
                         OpenGL::GL
                         "${CMAKE_DL_LIBS}"
                     )

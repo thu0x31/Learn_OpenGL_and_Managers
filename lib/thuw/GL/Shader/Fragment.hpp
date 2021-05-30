@@ -5,7 +5,6 @@
 #include <fstream>
 #include <iterator>
 #include <string>
-#include "thuw/GL/Shader/Compile.hpp"
 
 #ifndef NDEBUG
     #include <iostream>
@@ -43,6 +42,24 @@ private:
     }
 
     void compile() const {
-        thuw::Shader::compile(this);
+        const char* code = this->code.c_str();
+        glShaderSource(this->id, 1, &code, NULL);
+        glCompileShader(this->id);
+
+        #ifndef NDEBUG
+            std::cout << "Compile Shader Code: " << std::endl << code << std::endl;
+
+            int success;
+            glGetShaderiv(this->id, GL_COMPILE_STATUS, &success);
+
+            if(!success){
+                char infoLog[512];
+                glGetShaderInfoLog(this->id, 512, NULL, infoLog);
+                std::cout << "ERROR::SHADER:: " << infoLog << std::endl;
+                return;
+            }
+
+            std::cout << "Shader Compile is Success" << std::endl;
+        #endif
     }
 };
